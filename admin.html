@@ -19,38 +19,8 @@
 </head>
 <body style="background: var(--primary-navy-dark); min-height: 100vh;">
 
-  <!-- Admin Gate Security Modal with Encrypted Access Form -->
-  <div id="admin-gate-overlay" class="modal-backdrop">
-    <div class="modal-content-card" style="max-width: 440px; padding: 32px; text-align: center;">
-      <div style="margin-bottom: 16px;">
-        <img src="src/assets/logo.jpg" alt="Logo Bolsa de Trabajo Nuevo León" class="brand-logo-img" style="width: 80px; height: 80px;" />
-      </div>
-      <h2 style="font-family: var(--font-family-heading); font-size: 1.6rem; color: var(--primary-navy-dark); margin-bottom: 8px;">
-        Acceso Administrador Privado
-      </h2>
-      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">
-        Ingresa tu contraseña para gestionar las ofertas de empleo públicas de Nuevo León.
-      </p>
-
-      <form id="admin-gate-form">
-        <div class="form-group" style="margin-bottom: 20px;">
-          <input type="password" id="admin-pin-input" placeholder="Contraseña de Administrador" style="text-align: center; font-size: 1.1rem; padding: 12px;" required autocomplete="current-password" />
-          <span id="admin-pin-error" class="text-red hidden" style="font-size: 0.82rem; margin-top: 6px;">Contraseña incorrecta.</span>
-        </div>
-
-        <button type="submit" id="admin-login-btn" class="btn-primary glow-gold full-width">
-          <i class="fa-solid fa-key"></i> Entrar al Panel Privado
-        </button>
-      </form>
-
-      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px;">
-        <i class="fa-solid fa-shield-halved text-cyan"></i> Autenticación protegida mediante cifrado criptográfico SHA-256.
-      </p>
-    </div>
-  </div>
-
-  <!-- Main Private Dashboard Wrapper -->
-  <div id="admin-dashboard-wrapper" class="hidden">
+  <!-- Main Private Dashboard Wrapper (Direct Access) -->
+  <div id="admin-dashboard-wrapper">
     <!-- Header -->
     <header class="site-header" style="border-bottom: 2px solid var(--accent-gold);">
       <div class="navbar">

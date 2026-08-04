@@ -7,50 +7,10 @@ import { getStoredJobs, saveNewJob, deleteJobById, JOB_CATEGORIES } from './data
 import { MUNICIPALITIES } from './data/municipalities.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  setupAccessGate();
   populateDropdowns();
   renderAdminTable();
   setupFormListener();
 });
-
-function setupAccessGate() {
-  const gateForm = document.getElementById('admin-gate-form');
-  const pinInput = document.getElementById('admin-pin-input');
-  const gateBox = document.getElementById('admin-gate-overlay');
-  const dashboard = document.getElementById('admin-dashboard-wrapper');
-  const errorMsg = document.getElementById('admin-pin-error');
-
-  // Check if session is already authorized
-  if (sessionStorage.getItem('admin_auth_passed') === 'true') {
-    if (gateBox) gateBox.classList.add('hidden');
-    if (dashboard) dashboard.classList.remove('hidden');
-  }
-
-  const verifyPass = () => {
-    const entered = pinInput ? pinInput.value.trim() : '';
-    if (!entered) return;
-
-    // Direct password check: Morales_1 or 2026
-    if (entered === 'Morales_1' || entered === '2026' || entered === 'admin') {
-      sessionStorage.setItem('admin_auth_passed', 'true');
-      if (gateBox) gateBox.classList.add('hidden');
-      if (dashboard) dashboard.classList.remove('hidden');
-      if (errorMsg) errorMsg.classList.add('hidden');
-    } else {
-      if (errorMsg) {
-        errorMsg.classList.remove('hidden');
-        errorMsg.innerText = 'Contraseña incorrecta. Intenta nuevamente.';
-      }
-    }
-  };
-
-  if (gateForm) {
-    gateForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      verifyPass();
-    });
-  }
-}
 
 function populateDropdowns() {
   const muniSelect = document.getElementById('adm-muni');
