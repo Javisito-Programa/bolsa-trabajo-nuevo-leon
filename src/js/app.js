@@ -6,6 +6,7 @@
 import { JobList } from './components/jobList.js';
 import { ApplyModal } from './components/applyModal.js';
 import { MUNICIPALITIES } from './data/municipalities.js';
+import { getStoredJobs } from './data/jobsData.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize Apply Modal
@@ -18,7 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 3. Setup Hero Search Bar
+  // 3. Update Real Dynamic Job Counter
+  const realJobsEl = document.getElementById('stat-real-jobs');
+  if (realJobsEl) {
+    const jobs = getStoredJobs();
+    realJobsEl.innerText = jobs.length;
+  }
+
+  // 4. Setup Hero Search Bar
   const heroSearchInput = document.getElementById('hero-search-keyword');
   const heroMuniSelect = document.getElementById('hero-muni-select');
   const heroSearchBtn = document.getElementById('hero-search-btn');
@@ -53,27 +61,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-  // 4. Statistics Counter Animation
-  animateCounters();
 });
-
-function animateCounters() {
-  const counters = document.querySelectorAll('.stat-num[data-target]');
-  counters.forEach(counter => {
-    const target = parseInt(counter.getAttribute('data-target'), 10);
-    let count = 0;
-    const speed = target / 60;
-
-    const update = () => {
-      count += speed;
-      if (count < target) {
-        counter.innerText = Math.ceil(count).toLocaleString();
-        setTimeout(update, 20);
-      } else {
-        counter.innerText = target.toLocaleString();
-      }
-    };
-    update();
-  });
-}
