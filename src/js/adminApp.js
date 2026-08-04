@@ -1,10 +1,20 @@
 /* ==========================================================================
-   PRIVATE ADMIN APP CONTROLLER
+   PRIVATE ADMIN APP CONTROLLER WITH SHA-256 ENCRYPTED AUTHENTICATION
    Powers admin.html - Private publishing panel for Bolsa de Trabajo NL
    ========================================================================== */
 
 import { getStoredJobs, saveNewJob, deleteJobById, JOB_CATEGORIES } from './data/jobsData.js';
 import { MUNICIPALITIES } from './data/municipalities.js';
+
+// SHA-256 Cryptographic Hash of the administrator password
+const ADMIN_HASH = '353d949f3749534e875c0b5964dd38247d990ac2cfeb9fab9c298eb60bf7495f';
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   setupAccessGate();
@@ -20,25 +30,34 @@ function setupAccessGate() {
   const dashboard = document.getElementById('admin-dashboard-wrapper');
   const errorMsg = document.getElementById('admin-pin-error');
 
-  const checkPin = () => {
-    const val = pinInput ? pinInput.value.trim() : '';
-    if (val === '2026' || val === 'admin' || window.location.search.includes('key=2026')) {
+  // Check if session is already authorized
+  if (sessionStorage.getItem('admin_auth_passed') === 'true') {
+    if (gateBox) gateBox.classList.add('hidden');
+    if (dashboard) dashboard.classList.remove('hidden');
+  }
+
+  const verifyPass = async () => {
+    const entered = pinInput ? pinInput.value.trim() : '';
+    if (!entered) return;
+
+    const hash = await sha256(entered);
+    if (hash === ADMIN_HASH) {
+      sessionStorage.setItem('admin_auth_passed', 'true');
       if (gateBox) gateBox.classList.add('hidden');
       if (dashboard) dashboard.classList.remove('hidden');
+      if (errorMsg) errorMsg.classList.add('hidden');
     } else {
-      if (errorMsg) errorMsg.classList.remove('hidden');
+      if (errorMsg) {
+        errorMsg.classList.remove('hidden');
+        errorMsg.innerText = 'Contraseña incorrecta. Intenta nuevamente.';
+      }
     }
   };
 
-  // Check URL parameter for auto-login
-  if (window.location.search.includes('key=2026')) {
-    checkPin();
-  }
-
-  if (loginBtn) loginBtn.addEventListener('click', checkPin);
+  if (loginBtn) loginBtn.addEventListener('click', verifyPass);
   if (pinInput) {
     pinInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') checkPin();
+      if (e.key === 'Enter') verifyPass();
     });
   }
 }

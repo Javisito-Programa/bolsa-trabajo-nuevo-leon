@@ -19,22 +19,22 @@
 </head>
 <body style="background: var(--primary-navy-dark); min-height: 100vh;">
 
-  <!-- Admin Gate Security Modal -->
+  <!-- Admin Gate Security Modal with Encrypted Access -->
   <div id="admin-gate-overlay" class="modal-backdrop">
     <div class="modal-content-card" style="max-width: 440px; padding: 32px; text-align: center;">
       <div style="margin-bottom: 16px;">
         <img src="src/assets/logo.jpg" alt="Logo Bolsa de Trabajo Nuevo León" class="brand-logo-img" style="width: 80px; height: 80px;" />
       </div>
       <h2 style="font-family: var(--font-family-heading); font-size: 1.6rem; color: var(--primary-navy-dark); margin-bottom: 8px;">
-        Acceso Administrador
+        Acceso Administrador Privado
       </h2>
       <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">
-        Ingresa tu PIN de seguridad para gestionar las ofertas de empleo públicas de Nuevo León.
+        Ingresa tu contraseña para gestionar las ofertas de empleo públicas de Nuevo León.
       </p>
 
       <div class="form-group" style="margin-bottom: 20px;">
-        <input type="password" id="admin-pin-input" placeholder="PIN de Seguridad (ej. 2026)" style="text-align: center; font-size: 1.2rem; letter-spacing: 0.2em; padding: 12px;" />
-        <span id="admin-pin-error" class="text-red hidden" style="font-size: 0.8rem; margin-top: 6px;">PIN incorrecto. Intenta con 2026.</span>
+        <input type="password" id="admin-pin-input" placeholder="Contraseña de Administrador" style="text-align: center; font-size: 1.1rem; padding: 12px;" autocomplete="current-password" />
+        <span id="admin-pin-error" class="text-red hidden" style="font-size: 0.82rem; margin-top: 6px;">Contraseña incorrecta.</span>
       </div>
 
       <button id="admin-login-btn" class="btn-primary glow-gold full-width">
@@ -42,7 +42,7 @@
       </button>
 
       <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px;">
-        <i class="fa-solid fa-lock text-cyan"></i> Enlace privado de uso exclusivo para el reclutador responsable.
+        <i class="fa-solid fa-shield-halved text-cyan"></i> Autenticación protegida mediante cifrado criptográfico SHA-256.
       </p>
     </div>
   </div>
