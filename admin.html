@@ -19,7 +19,7 @@
 </head>
 <body style="background: var(--primary-navy-dark); min-height: 100vh;">
 
-  <!-- Admin Gate Security Modal with Encrypted Access -->
+  <!-- Admin Gate Security Modal with Encrypted Access Form -->
   <div id="admin-gate-overlay" class="modal-backdrop">
     <div class="modal-content-card" style="max-width: 440px; padding: 32px; text-align: center;">
       <div style="margin-bottom: 16px;">
@@ -32,14 +32,16 @@
         Ingresa tu contraseña para gestionar las ofertas de empleo públicas de Nuevo León.
       </p>
 
-      <div class="form-group" style="margin-bottom: 20px;">
-        <input type="password" id="admin-pin-input" placeholder="Contraseña de Administrador" style="text-align: center; font-size: 1.1rem; padding: 12px;" autocomplete="current-password" />
-        <span id="admin-pin-error" class="text-red hidden" style="font-size: 0.82rem; margin-top: 6px;">Contraseña incorrecta.</span>
-      </div>
+      <form id="admin-gate-form">
+        <div class="form-group" style="margin-bottom: 20px;">
+          <input type="password" id="admin-pin-input" placeholder="Contraseña de Administrador" style="text-align: center; font-size: 1.1rem; padding: 12px;" required autocomplete="current-password" />
+          <span id="admin-pin-error" class="text-red hidden" style="font-size: 0.82rem; margin-top: 6px;">Contraseña incorrecta.</span>
+        </div>
 
-      <button id="admin-login-btn" class="btn-primary glow-gold full-width">
-        <i class="fa-solid fa-key"></i> Entrar al Panel Privado
-      </button>
+        <button type="submit" id="admin-login-btn" class="btn-primary glow-gold full-width">
+          <i class="fa-solid fa-key"></i> Entrar al Panel Privado
+        </button>
+      </form>
 
       <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px;">
         <i class="fa-solid fa-shield-halved text-cyan"></i> Autenticación protegida mediante cifrado criptográfico SHA-256.

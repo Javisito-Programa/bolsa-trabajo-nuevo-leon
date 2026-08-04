@@ -6,7 +6,7 @@
 import { getStoredJobs, saveNewJob, deleteJobById, JOB_CATEGORIES } from './data/jobsData.js';
 import { MUNICIPALITIES } from './data/municipalities.js';
 
-// SHA-256 Cryptographic Hash of the administrator password
+// SHA-256 Cryptographic Hash of the administrator password "Morales_1"
 const ADMIN_HASH = '353d949f3749534e875c0b5964dd38247d990ac2cfeb9fab9c298eb60bf7495f';
 
 async function sha256(message) {
@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function setupAccessGate() {
+  const gateForm = document.getElementById('admin-gate-form');
   const pinInput = document.getElementById('admin-pin-input');
-  const loginBtn = document.getElementById('admin-login-btn');
   const gateBox = document.getElementById('admin-gate-overlay');
   const dashboard = document.getElementById('admin-dashboard-wrapper');
   const errorMsg = document.getElementById('admin-pin-error');
@@ -49,15 +49,15 @@ function setupAccessGate() {
     } else {
       if (errorMsg) {
         errorMsg.classList.remove('hidden');
-        errorMsg.innerText = 'Contraseña incorrecta. Intenta nuevamente.';
+        errorMsg.innerText = 'Contraseña incorrecta. Verifica mayúsculas y minúsculas.';
       }
     }
   };
 
-  if (loginBtn) loginBtn.addEventListener('click', verifyPass);
-  if (pinInput) {
-    pinInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') verifyPass();
+  if (gateForm) {
+    gateForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      verifyPass();
     });
   }
 }
