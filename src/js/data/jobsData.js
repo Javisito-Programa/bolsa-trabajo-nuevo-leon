@@ -5,13 +5,13 @@
 
 export const JOB_CATEGORIES = [
   { id: 'all', name: 'Todas las Categorías', icon: 'fa-layer-group' },
-  { id: 'tecnologia', name: 'Tecnología & Software', icon: 'fa-code' },
   { id: 'manufactura', name: 'Ingeniería & Manufactura', icon: 'fa-industry' },
-  { id: 'finanzas', name: 'Finanzas & Contabilidad', icon: 'fa-chart-pie' },
   { id: 'logistica', name: 'Logística & Cadena de Suministro', icon: 'fa-truck-fast' },
-  { id: 'salud', name: 'Salud & Ciencias Médicas', icon: 'fa-user-nurse' },
-  { id: 'comercial', name: 'Ventas & Desarrollo de Negocio', icon: 'fa-briefcase' },
-  { id: 'recursos-humanos', name: 'Recursos Humanos & Talento', icon: 'fa-users' }
+  { id: 'mantenimiento', name: 'Mantenimiento e Instalaciones', icon: 'fa-wrench' },
+  { id: 'operaciones', name: 'Operaciones & Producción', icon: 'fa-gears' },
+  { id: 'tecnologia', name: 'Tecnología & Software', icon: 'fa-code' },
+  { id: 'finanzas', name: 'Finanzas & Contabilidad', icon: 'fa-chart-pie' },
+  { id: 'salud', name: 'Salud & Ciencias Médicas', icon: 'fa-user-nurse' }
 ];
 
 export const WORK_MODALITIES = [
@@ -23,146 +23,304 @@ export const WORK_MODALITIES = [
 
 const INITIAL_JOBS = [
   {
-    id: 'sp-01',
-    title: 'Senior Cloud Architecture Lead (AWS / Azure)',
-    company: 'Softtek Global Solutions',
+    id: 'daltile-01',
+    title: 'Ayudante General (Hombres y Mujeres)',
+    company: 'Grupo Daltile San Pedro',
     logoBg: '#00A8E8',
-    logoText: 'STK',
+    logoText: 'DLT',
     municipalityId: 'san-pedro',
     municipalityName: 'San Pedro Garza García',
-    category: 'tecnologia',
-    modality: 'hibrido',
-    salary: '$75,000 - $95,000 MXN / mes',
-    featured: true,
-    urgent: false,
-    verified: true,
-    postedDate: 'Hace 2 horas',
-    description: 'Buscamos un Arquitecto de Nube Senior para liderar la transformación digital de clientes corporativos multinacionales en Valle Oriente.',
-    requirements: [
-      'Más de 6 años de experiencia en arquitectura multicloud (AWS/Azure).',
-      'Certificación AWS Solutions Architect Professional o equivalente.',
-      'Inglés avanzado fluído (C1/C2).',
-      'Experiencia en infraestructura como código (Terraform, CloudFormation).'
-    ],
-    benefits: [
-      'Seguro de Gastos Médicos Mayores (SGMM) familiar.',
-      'Fondo de ahorro del 13% y vales de despensa.',
-      'Bono anual por desempeño corporativo.',
-      'Esquema 100% nómina con prestaciones superiores.'
-    ]
-  },
-  {
-    id: 'mty-01',
-    title: 'Lead Full-Stack Developer (React & Node.js)',
-    company: 'Epicor Software México',
-    logoBg: '#E5A93C',
-    logoText: 'EPC',
-    municipalityId: 'monterrey',
-    municipalityName: 'Monterrey',
-    category: 'tecnologia',
-    modality: 'remoto',
-    salary: '$60,000 - $80,000 MXN / mes',
+    category: 'manufactura',
+    modality: 'presencial',
+    salary: '$3,008 - $3,180 MXN / semanal',
     featured: true,
     urgent: true,
     verified: true,
     postedDate: 'Hoy',
-    description: 'Desarrollador Full Stack para crear soluciones ERP de nueva generación en nuestro centro de desarrollo en Pabellón M.',
+    description: 'Excelente oportunidad laboral en Grupo Daltile San Pedro para integrar el equipo de operaciones industriales.',
     requirements: [
-      '4+ años con React.js, TypeScript y Node.js (Express/NestJS).',
-      'Manejo sólido de PostgreSQL y MongoDB.',
-      'Conocimientos en CI/CD y Docker/Kubernetes.'
+      'Hombres y mujeres (18+ años).',
+      'Disponibilidad para turnos rotativos (Mañana 6:00 AM, Tarde 2:30 PM, Noche 10:30 PM).',
+      'Ganas de trabajar y superarse.'
     ],
-    benefits: ['100% Trabajo Remoto opcional', 'Presupuesto anual de educación/certificaciones', 'Seguro SGMM + Dental', 'Laptop de última generación']
+    benefits: [
+      'Salario semanal no tenemos semana de fondo.',
+      'Comedor subsidiado (24 comidas GRATIS al inicio).',
+      'Gimnasio GRATIS para empleados.',
+      'Prestaciones superiores a la ley y Caja de ahorro.',
+      'Aguinaldo de 31 días y Vales de despensa.',
+      '11 categorías para crecer laboralmente.'
+    ]
   },
   {
-    id: 'apo-01',
-    title: 'Ingeniero de Automatización & Robótica PLC',
-    company: 'Nidec Global Appliance',
+    id: 'daltile-02',
+    title: 'Electromecánico (Hombres y Mujeres)',
+    company: 'Grupo Daltile San Pedro',
     logoBg: '#00A8E8',
-    logoText: 'NDC',
+    logoText: 'DLT',
+    municipalityId: 'san-pedro',
+    municipalityName: 'San Pedro Garza García',
+    category: 'mantenimiento',
+    modality: 'presencial',
+    salary: '$3,550 - $4,106 MXN / semanal',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Mantenimiento preventivo y correctivo electromecánico en planta industrial Daltile San Pedro.',
+    requirements: [
+      'Conocimientos o experiencia en mantenimiento electromecánico.',
+      'Disponibilidad para turnos rotativos.',
+      'Documentación completa.'
+    ],
+    benefits: [
+      'Sueldo semanal de $3,550 a $4,106.',
+      'Comedor subsidiado (24 comidas GRATIS al inicio).',
+      'Gimnasio GRATIS.',
+      'Aguinaldo de 31 días y Vales de despensa.',
+      'Caja de ahorro y Préstamos sindicales.',
+      'Excelente ambiente laboral.'
+    ]
+  },
+  {
+    id: 'daltile-03',
+    title: 'Operador Técnico',
+    company: 'Grupo Daltile San Pedro',
+    logoBg: '#00A8E8',
+    logoText: 'DLT',
+    municipalityId: 'san-pedro',
+    municipalityName: 'San Pedro Garza García',
+    category: 'operaciones',
+    modality: 'presencial',
+    salary: '$3,263 MXN / semanal',
+    featured: true,
+    urgent: false,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Operación técnica de maquinaria e inspección de procesos en planta Daltile San Pedro.',
+    requirements: [
+      'Hombres y mujeres.',
+      'Disponibilidad para turnos rotativos.',
+      'Compromiso y puntualidad.'
+    ],
+    benefits: [
+      'Sueldo semanal libre de $3,263.',
+      'Sin semana de fondo.',
+      'Comedor subsidiado (24 comidas GRATIS).',
+      'Gimnasio GRATIS.',
+      'Prestaciones superiores a la ley.'
+    ]
+  },
+  {
+    id: 'daltile-04',
+    title: 'Montacarguista (Ambos Sexos)',
+    company: 'Grupo Daltile San Pedro',
+    logoBg: '#00A8E8',
+    logoText: 'DLT',
+    municipalityId: 'san-pedro',
+    municipalityName: 'San Pedro Garza García',
+    category: 'logistica',
+    modality: 'presencial',
+    salary: '$3,263 MXN / semanal',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Manejo de montacargas y acomodo de material en almacén de planta San Pedro.',
+    requirements: [
+      'Experiencia en manejo de montacargas.',
+      'Hombres y mujeres.',
+      'Disponibilidad de turno rotativo.'
+    ],
+    benefits: [
+      'Sueldo semanal de $3,263 sin semana de fondo.',
+      'Gimnasio GRATIS.',
+      'Comedor subsidiado + 24 comidas gratis iniciales.',
+      'Caja de ahorro y préstamos sindicales.',
+      'Aguinaldo de 31 días y vales de despensa.'
+    ]
+  },
+  {
+    id: 'rosenberger-01',
+    title: 'Ayudante General (Contratación Inmediata)',
+    company: 'Rosenberger México',
+    logoBg: '#EF4444',
+    logoText: 'RSB',
     municipalityId: 'apodaca',
     municipalityName: 'Apodaca',
     category: 'manufactura',
     modality: 'presencial',
-    salary: '$42,000 - $55,000 MXN / mes',
+    salary: '$2,919 MXN / semanal',
     featured: true,
     urgent: true,
     verified: true,
     postedDate: 'Hoy',
-    description: 'Programación de celdas robóticas Fanuc/ABB y controladores Siemens S7-1500 en Parque Industrial Apodaca.',
-    requirements: ['Ingeniería en Mecatrónica, Electrónica o Control.', '3+ años de experiencia comprobable en integración de líneas industriales.', 'Programación ladder y Allen Bradley.'],
-    benefits: ['Transporte de personal gratuito', 'Comedor subsidiado al 80%', 'Fondo de ahorro 13%', 'Bono de puntualidad']
-  },
-  {
-    id: 'pes-01',
-    title: 'Ingeniero Principal de Ensamble Automotriz',
-    company: 'KIA México',
-    logoBg: '#EF4444',
-    logoText: 'KIA',
-    municipalityId: 'pesqueria',
-    municipalityName: 'Pesquería',
-    category: 'manufactura',
-    modality: 'presencial',
-    salary: '$50,000 - $65,000 MXN / mes',
-    featured: true,
-    urgent: true,
-    verified: true,
-    postedDate: 'Hace 1 hora',
-    description: 'Optimización de líneas de ensamble final para vehículos eléctricos en la mega planta de Pesquería.',
-    requirements: ['Ingeniería Mecánica, Industrial o Automotriz.', '4+ años en plantas armadoras OEM.', 'Manejo de metodologías KAIZEN y 5S.'],
-    benefits: ['Descuento exclusivo en compra de autos KIA', 'Transporte directo desde Mty/Guadalupe/Apodaca', 'Comedor corporativo', 'Seguro de gastos médicos']
-  },
-  {
-    id: 'sc-01',
-    title: 'Senior Systems Engineer - Electromobilidad',
-    company: 'Tesla / Subcontratista Tecnológico',
-    logoBg: '#EF4444',
-    logoText: 'TSL',
-    municipalityId: 'santa-catarina',
-    municipalityName: 'Santa Catarina',
-    category: 'tecnologia',
-    modality: 'hibrido',
-    salary: '$70,000 - $90,000 MXN / mes',
-    featured: true,
-    urgent: true,
-    verified: true,
-    postedDate: 'Hace 5 horas',
-    description: 'Integración de sistemas de prueba para paquetes de baterías y controladores de potencia en Santa Catarina.',
-    requirements: ['Ingeniería en Electrónica, Mecatrónica o Sistemas Embobados.', 'Experiencia en protocolos CAN bus, Ethernet industrial.', 'Inglés fluído indispensable.'],
-    benefits: ['Opciones de acciones corporativas (RSUs)', 'SGMM de cobertura amplia', 'Horarios flexibles', 'Capacitación en EE.UU.']
-  },
-  {
-    id: 'sp-02',
-    title: 'Gerente de Análisis Financiero & M&A',
-    company: 'Grupo Financiero Banregio',
-    logoBg: '#10B981',
-    logoText: 'BRG',
-    municipalityId: 'san-pedro',
-    municipalityName: 'San Pedro Garza García',
-    category: 'finanzas',
-    modality: 'presencial',
-    salary: '$68,000 - $82,000 MXN / mes',
-    featured: true,
-    urgent: true,
-    verified: true,
-    postedDate: 'Hace 4 horas',
-    description: 'Responsable de la evaluación financiera de proyectos de inversión, fusiones y adquisiciones estratégicas corporativas.',
+    description: 'Ensamble de componentes, manejo de cables de fibra óptica/cobre, empaque e inspección de calidad.',
     requirements: [
-      'Licenciatura en Finanzas, Economía o Ingeniería Industrial con Maestría en Finanzas.',
-      'Experiencia mínima de 5 años en banca de inversión o corporativa.',
-      'Dominio avanzado de modelos financieros complejos en Excel y Bloomberg Terminal.',
-      'Inglés de negocios avanzado.'
+      'Hombres y mujeres (18 a 55 años).',
+      'Secundaria terminada.',
+      'Experiencia básica en fábrica o puesto similar.'
     ],
     benefits: [
-      'Plan de pensión corporativo.',
-      '30 días de aguinaldo y 70% prima vacacional.',
-      'Club social y deportivo corporativo.',
-      'Seguro de vida de 48 meses de sueldo.'
+      'Sueldo de $417 diarios ($2,919 semanales).',
+      'Turno fijo de Tarde (2:00 PM a 10:00 PM).',
+      '$800 vales de despensa mensuales + $1,000 bono de asistencia.',
+      'Transporte gratuito y Comedor subsidiado ($23.50).',
+      '8% fondo de ahorro + 30 días de aguinaldo.',
+      'Prestaciones de ley desde el primer día.'
+    ]
+  },
+  {
+    id: 'rosenberger-02',
+    title: 'Almacenista (Turnos Día o Noche)',
+    company: 'Rosenberger México',
+    logoBg: '#EF4444',
+    logoText: 'RSB',
+    municipalityId: 'apodaca',
+    municipalityName: 'Apodaca',
+    category: 'logistica',
+    modality: 'presencial',
+    salary: '$2,919 MXN / semanal',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Recepción, orden, almacenamiento y preparación de embarques en almacén industrial.',
+    requirements: [
+      'Hombres y mujeres (18 a 55 años).',
+      'Secundaria terminada.',
+      'Experiencia mínima en almacén o fábrica.'
+    ],
+    benefits: [
+      'Sueldo semanal de $2,919 ($417 diarios).',
+      'Turno fijo a elegir (Día 6:00am - 2:00pm o Noche 10:00pm - 6:00am).',
+      '$800 vales mensuales + $1,000 bono mensual.',
+      'Transporte gratuito y Comedor subsidiado.',
+      '8% fondo de ahorro + 30 días de aguinaldo.'
+    ]
+  },
+  {
+    id: 'rosenberger-03',
+    title: 'Materialista (Turnos Día o Noche)',
+    company: 'Rosenberger México',
+    logoBg: '#EF4444',
+    logoText: 'RSB',
+    municipalityId: 'apodaca',
+    municipalityName: 'Apodaca',
+    category: 'logistica',
+    modality: 'presencial',
+    salary: '$2,919 MXN / semanal',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Abastecimiento constante de materia prima e insumos a las líneas de producción.',
+    requirements: [
+      'Hombres y mujeres (18 a 55 años).',
+      'Secundaria terminada.',
+      'Experiencia como materialista o ayuda general en planta.'
+    ],
+    benefits: [
+      'Sueldo semanal de $2,919 ($417 diarios).',
+      'Turnos fijos (Día o Noche).',
+      '$800 en vales de despensa + $1,000 bono mensual.',
+      'Transporte gratuito.',
+      '8% fondo de ahorro y prestaciones de ley.'
+    ]
+  },
+  {
+    id: 'mattel-01',
+    title: 'Ayudante General – Ensamble de Juguetes',
+    company: 'Mattel Escobedo',
+    logoBg: '#E5A93C',
+    logoText: 'MTL',
+    municipalityId: 'escobedo',
+    municipalityName: 'General Escobedo',
+    category: 'manufactura',
+    modality: 'presencial',
+    salary: '$2,422 MXN / semanal',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Ensamble y empaque de juguetes en la gran planta Mattel Escobedo. ¡Aceptamos reingresos!',
+    requirements: [
+      'Hombres y mujeres (Desde 18 años, sin límite de edad).',
+      'Primaria terminada.',
+      'Con o sin experiencia.'
+    ],
+    benefits: [
+      'Turno fijo de tarde (3:00 p.m. a 11:30 p.m.).',
+      'Descanso fijo los Domingos.',
+      'Transporte gratuito y Comedor subsidiado.',
+      '$700 en vales de despensa al mes.',
+      'Fondo de ahorro + 30 días de aguinaldo.',
+      'Crecimiento laboral.'
+    ]
+  },
+  {
+    id: 'mattel-02',
+    title: 'Montacarguista (H.S. y/o H.P.)',
+    company: 'Mattel Escobedo',
+    logoBg: '#E5A93C',
+    logoText: 'MTL',
+    municipalityId: 'escobedo',
+    municipalityName: 'General Escobedo',
+    category: 'logistica',
+    modality: 'presencial',
+    salary: '$3,471 MXN / semanal ($495.99 diarios)',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Operación de montacargas hombre sentado y/o hombre parado para movimientos de almacén.',
+    requirements: [
+      'Hombres y mujeres desde 18 años.',
+      'Primaria terminada.',
+      'DC3, licencia o diploma de montacargas.'
+    ],
+    benefits: [
+      'Sueldo diario $495.99 ($3,471 semanales).',
+      'Turno rotativo.',
+      'Transporte gratuito y Comedor subsidiado.',
+      '$700 en vales de despensa + Fondo de ahorro.',
+      '30 días de aguinaldo y prestaciones de ley.'
+    ]
+  },
+  {
+    id: 'venameca-01',
+    title: 'Ayudante General – Ingreso Inmediato',
+    company: 'Venameca México',
+    logoBg: '#10B981',
+    logoText: 'VNM',
+    municipalityId: 'monterrey',
+    municipalityName: 'Monterrey',
+    category: 'manufactura',
+    modality: 'presencial',
+    salary: '$2,587 MXN / semanal libre + Bonos',
+    featured: true,
+    urgent: true,
+    verified: true,
+    postedDate: 'Hoy',
+    description: 'Trabajo manual en producción con ingreso al día siguiente de tu entrevista.',
+    requirements: [
+      'Hombres y mujeres (18 a 55 años).',
+      'Primaria terminada.',
+      'Sin experiencia y sin exámenes médicos.',
+      'Buena visión para trabajo manual.'
+    ],
+    benefits: [
+      'Pago semanal libre de $2,587.',
+      'Bono semanal de puntualidad/asistencia: $250.',
+      'Ayuda de transporte: $125 semanales.',
+      'Bonos mensuales de seguridad ($200) y productividad ($500).',
+      'Taxi de regreso a casa en turno de tarde.',
+      'No maneja semana de fondo ni desfasada.'
     ]
   }
 ];
 
-const STORAGE_KEY = 'bolsa_trabajo_nl_jobs_v1';
+const STORAGE_KEY = 'bolsa_trabajo_nl_jobs_v2';
 
 export function getStoredJobs() {
   const data = localStorage.getItem(STORAGE_KEY);
