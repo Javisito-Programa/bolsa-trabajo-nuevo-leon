@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bolsa de Trabajo Nuevo León | Tu Futuro Laboral Comienza Aquí</title>
+  <meta name="description" content="Portal oficial de ofertas de empleo en el estado de Nuevo León por municipio. Encuentra las mejores vacantes verificadas en Monterrey, San Pedro, Apodaca, Pesquería y más.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom App Styles -->
+  <link rel="stylesheet" href="src/css/style.css">
+  <link rel="stylesheet" href="src/css/jobs.css">
+</head>
+<body>
+
+  <!-- Top Notice & Official Facebook Contact Bar -->
+  <div class="top-notice-bar">
+    <div class="trust-text">
+      <i class="fa-solid fa-shield-halved text-cyan"></i>
+      <span>Bolsa Oficial de Empleo del Estado de Nuevo León &bull; Proceso 100% Gratuito y Verificado</span>
+    </div>
+    <div class="top-contacts">
+      <a href="https://www.facebook.com/profile.php?id=61593038273758&sk=followers" target="_blank" rel="noopener noreferrer" style="color: #FFFFFF; font-weight: 700; text-decoration: underline;">
+        <i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Contacto Oficial en Facebook
+      </a>
+      <span><i class="fa-solid fa-building-user"></i> 51 Municipios Conectados</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="site-header">
+    <nav class="navbar">
+      <!-- Brand Logo - Official User Logo Image -->
+      <a href="#" class="brand-logo-container">
+        <img src="src/assets/logo.jpg" alt="Logo Bolsa de Trabajo Nuevo León" class="brand-logo-img" />
+        <div class="brand-titles">
+          <span class="logo-main-text">BOLSA DE TRABAJO</span>
+          <span class="logo-sub-text">NUEVO LEÓN</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link active"><i class="fa-solid fa-house"></i> Inicio</a></li>
+        <li><a href="#jobs-section-mount" class="nav-link"><i class="fa-solid fa-briefcase"></i> Vacantes Activas</a></li>
+        <li>
+          <a href="https://www.facebook.com/profile.php?id=61593038273758&sk=followers" target="_blank" rel="noopener noreferrer" class="btn-publish-job" style="text-decoration: none;">
+            <i class="fa-brands fa-facebook"></i> Contactar en Facebook
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-text-content">
+        <div class="hero-badge-tag">
+          <i class="fa-solid fa-certificate"></i> Tu Futuro Laboral Comienza Aquí
+        </div>
+        <h1 class="hero-title">
+          Ofertas de Empleo en <span class="text-gold">Nuevo León</span> por <span class="text-cyan">Municipio</span>
+        </h1>
+        <p class="hero-subtitle">
+          Encuentra las mejores oportunidades laborales en Monterrey, San Pedro, Apodaca, Pesquería, Guadalupe y todos los municipios del estado. Postúlate directo en nuestro perfil oficial de Facebook.
+        </p>
+
+        <!-- Quick Hero Search Bar -->
+        <div class="filter-controls-row" style="background: rgba(255,255,255,0.08); padding: 16px; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.15); margin-bottom: 32px;">
+          <div class="search-input-wrap">
+            <i class="fa-solid fa-magnifying-glass icon"></i>
+            <input type="text" id="hero-search-keyword" placeholder="¿Qué puesto buscas? (ej. Ingeniero, Contador, Vendedor)..." />
+          </div>
+          <div class="modality-select-wrap">
+            <i class="fa-solid fa-location-dot icon"></i>
+            <select id="hero-muni-select">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div style="grid-column: 1 / -1; margin-top: -10px;">
+            <button id="hero-search-btn" class="btn-primary glow-cyan full-width" style="padding: 14px;">
+              <i class="fa-solid fa-magnifying-glass"></i> Buscar Ofertas Laborales
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Statistics Counter -->
+        <div class="hero-stats-row">
+          <div class="stat-item">
+            <span class="stat-num text-gold" data-target="15420">0</span>
+            <span class="stat-label">Vacantes Activas</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num text-cyan" data-target="51">0</span>
+            <span class="stat-label">Municipios Conectados</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num text-green" data-target="3850">0</span>
+            <span class="stat-label">Empresas Registradas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual - Official Logo Badge -->
+      <div class="hero-badge-visual">
+        <img src="src/assets/logo.jpg" alt="Bolsa de Trabajo Nuevo León Logo Oficial" class="hero-official-logo-img" />
+      </div>
+    </div>
+
+    <!-- Mountain Overlay Background SVG -->
+    <div class="hero-mountain-bg"></div>
+  </section>
+
+  <!-- Partner Logos / Trust Bar -->
+  <section class="trust-bar-section">
+    <div class="trust-bar-container">
+      <span class="trust-title"><i class="fa-solid fa-building-circle-check text-cyan"></i> Principales Empresas en NL:</span>
+      <div class="partner-logos">
+        <span class="partner-tag">CEMEX</span>
+        <span class="partner-tag">SOFTTEK</span>
+        <span class="partner-tag">TERNIUM</span>
+        <span class="partner-tag">KIA MOTORS</span>
+        <span class="partner-tag">BANREGIO</span>
+        <span class="partner-tag">ARCA CONTINENTAL</span>
+        <span class="partner-tag">TESLA GIGA</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="main-wrapper">
+    <!-- Job Catalog Mount Point -->
+    <section id="jobs-section-mount">
+      <!-- Injected by jobList.js -->
+    </section>
+  </main>
+
+  <!-- Modal / Drawer Container -->
+  <div id="job-modal-container">
+    <!-- Injected by applyModal.js -->
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="brand-logo-container">
+          <img src="src/assets/logo.jpg" alt="Logo Bolsa de Trabajo NL" class="brand-logo-img" style="width: 44px; height: 44px;" />
+          <div class="brand-titles">
+            <span class="logo-main-text" style="font-size: 1.2rem;">BOLSA DE TRABAJO</span>
+            <span class="logo-sub-text">NUEVO LEÓN</span>
+          </div>
+        </div>
+        <p>
+          Plataforma oficial para la promoción del empleo formal y desarrollo laboral en los 51 municipios del estado de Nuevo León.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Municipios Principales</h4>
+        <ul class="footer-links">
+          <li><a href="#jobs-section-mount">Monterrey</a></li>
+          <li><a href="#jobs-section-mount">San Pedro Garza García</a></li>
+          <li><a href="#jobs-section-mount">Apodaca</a></li>
+          <li><a href="#jobs-section-mount">San Nicolás de los Garza</a></li>
+          <li><a href="#jobs-section-mount">Pesquería & Guadalupe</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto de Postulantes</h4>
+        <ul class="footer-links">
+          <li>
+            <a href="https://www.facebook.com/profile.php?id=61593038273758&sk=followers" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-facebook text-cyan"></i> Perfil Oficial en Facebook
+            </a>
+          </li>
+          <li><a href="#">Aviso de Privacidad</a></li>
+          <li><a href="#">Términos y Condiciones</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Enviar Solicitud Directa</h4>
+        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 12px;">
+          ¿Deseas enviar tu perfil al reclutador?
+        </p>
+        <a href="https://www.facebook.com/profile.php?id=61593038273758&sk=followers" target="_blank" rel="noopener noreferrer" class="btn-primary glow-gold" style="padding: 10px 18px; text-decoration: none; font-size: 0.88rem; background: #1877F2; color: #FFFFFF;">
+          <i class="fa-brands fa-facebook"></i> Contactar por Facebook
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Bolsa de Trabajo Nuevo León. Todos los derechos reservados.</span>
+      <span>Diseñado con tecnología de alta confianza &bull; Tu futuro laboral comienza aquí</span>
+    </div>
+  </footer>
+
+  <!-- Application Main JavaScript -->
+  <script type="module" src="src/js/app.js"></script>
+</body>
+</html>

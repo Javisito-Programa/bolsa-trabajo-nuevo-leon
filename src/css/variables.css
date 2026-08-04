@@ -1,0 +1,96 @@
+/* ==========================================================================
+   BOLSA DE TRABAJO NUEVO LEÓN - DESIGN SYSTEM & TOKENS
+   Inspired by official logo: Deep Navy Blue, Tech Cyan, Gold Accent
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Derived from Logo */
+  --primary-navy-dark: #081B2F;
+  --primary-navy: #0D2D4C;
+  --primary-navy-light: #163B63;
+  --primary-navy-surface: #1C4673;
+
+  --accent-cyan: #00A8E8;
+  --accent-cyan-hover: #0082B8;
+  --accent-cyan-light: #E5F6FD;
+  --accent-cyan-glow: rgba(0, 168, 232, 0.35);
+
+  --accent-gold: #E5A93C;
+  --accent-gold-dark: #C4881E;
+  --accent-gold-light: #FFF8EA;
+  --accent-gold-glow: rgba(229, 169, 60, 0.4);
+
+  --status-green: #10B981;
+  --status-green-light: #ECFDF5;
+  --status-orange: #F97316;
+  --status-red: #EF4444;
+
+  /* Neutral Tones */
+  --bg-main: #F4F7FA;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F0F4F8;
+  --border-color: #E2E8F0;
+  --border-focus: #00A8E8;
+
+  --text-dark: #0F172A;
+  --text-medium: #475569;
+  --text-muted: #64748B;
+  --text-light: #F8FAFC;
+
+  /* Typography */
+  --font-family-base: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(13, 45, 76, 0.04);
+  --shadow-md: 0 4px 12px rgba(13, 45, 76, 0.08);
+  --shadow-lg: 0 12px 28px rgba(13, 45, 76, 0.12);
+  --shadow-xl: 0 20px 40px rgba(13, 45, 76, 0.18);
+  --shadow-cyan: 0 8px 24px rgba(0, 168, 232, 0.25);
+  --shadow-gold: 0 8px 24px rgba(229, 169, 60, 0.25);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Base Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
