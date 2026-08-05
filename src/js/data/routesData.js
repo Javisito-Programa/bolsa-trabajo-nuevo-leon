@@ -1,9 +1,25 @@
 /* ==========================================================================
    TRANSPORTE DE PERSONAL - RUTAS Y PUNTOS DE ABORDO (NUEVO LEÓN)
-   Parsed from official TREGAR / Rosenberger routes specification PDF
+   Parsed from official TREGAR / Rosenberger routes specification PDF & Special Express Stops
    ========================================================================== */
 
 export const TRANSPORT_ROUTES = [
+  {
+    id: 'R-EXPRESS',
+    name: '⭐ Ruta Especial Exprés - Puntos Directos',
+    municipality: 'Juárez / Apodaca / Guadalupe',
+    color: '#E5A93C',
+    stops: [
+      { id: 1, name: 'S-Mart Santa Cruz', lat: 25.6740, lng: -100.1510, ta: '06:00 AM', tb: '14:00 PM', tc: '22:00 PM', mapUrl: 'https://maps.app.goo.gl/D4VWNbC21riGgzDM7?g_st=ac' },
+      { id: 2, name: 'Telcel Sun Mall VIP', lat: 25.6690, lng: -100.1380, ta: '06:15 AM', tb: '14:15 PM', tc: '22:15 PM', mapUrl: 'https://maps.app.goo.gl/jLvi2LdTxjCNhcmG7' },
+      { id: 3, name: 'Monumento a Juárez', lat: 25.6510, lng: -100.0960, ta: '06:25 AM', tb: '14:25 PM', tc: '22:25 PM', mapUrl: 'https://maps.app.goo.gl/ZEwXt23EHiLG5gen7?g_st=ac' },
+      { id: 4, name: 'Farmacias Guadalajara Villas de San Juan', lat: 25.6450, lng: -100.0820, ta: '06:35 AM', tb: '14:35 PM', tc: '22:35 PM', mapUrl: 'https://maps.app.goo.gl/RFvnse91yXxTpJoTA?g_st=ac' },
+      { id: 5, name: 'Seven Eleven Santa Isabel', lat: 25.7180, lng: -100.1470, ta: '06:50 AM', tb: '14:50 PM', tc: '22:50 PM', mapUrl: 'https://maps.app.goo.gl/S5X8t4q2oST1eDf68?g_st=ac' },
+      { id: 6, name: 'Polivalente Anzures', lat: 25.7050, lng: -100.1590, ta: '07:00 AM', tb: '15:00 PM', tc: '23:00 PM', mapUrl: 'https://maps.app.goo.gl/K1yb4TEb7iTyxiiSA?g_st=ac' },
+      { id: 7, name: 'Gasera Entronque a Juárez', lat: 25.7350, lng: -100.1620, ta: '07:15 AM', tb: '15:15 PM', tc: '23:15 PM', mapUrl: 'https://maps.app.goo.gl/6bgR2R65nwXGvXrg7?g_st=ac' },
+      { id: 8, name: 'Carnicería Méndez', lat: 25.7650, lng: -100.1450, ta: '07:35 AM', tb: '15:35 PM', tc: '23:35 PM', mapUrl: 'https://maps.app.goo.gl/LuKMgzBy2ivzqdLU9?g_st=ac' }
+    ]
+  },
   {
     id: 'R-1',
     name: 'Ruta 1: Anzures – Santa Isabel',
@@ -205,7 +221,7 @@ export const TRANSPORT_ROUTES = [
       { id: 5, name: 'Av. Guatemala y Hda. San Carlos (OXXO)', lat: 25.7590, lng: -100.2920, ta: '04:37', tb: '12:37', tc: '20:37' },
       { id: 8, name: 'Av. Concordia y C. O Primera (Frente Farmacia GDL)', lat: 25.7660, lng: -100.2990, ta: '04:45', tb: '12:45', tc: '20:45' },
       { id: 11, name: 'Av. Estelaris y Av. E-Sexta (Frente OXXO)', lat: 25.7730, lng: -100.3060, ta: '04:52', tb: '12:52', tc: '20:52' },
-      { id: 15, name: 'Real Santa Rosa y C. Halcón (Sumerca)', lat: 25.7810, lng: -100.3140, ta: '05:07', tb: '13:07', tc: '21:07' }
+      { id: 15, name: 'Real Santa Rosa y C. Halcón (Sumerca)', lat: 25.7810, lng: -100.3140, ta: '05:10', tb: '13:10', tc: '21:10' }
     ]
   }
 ];
