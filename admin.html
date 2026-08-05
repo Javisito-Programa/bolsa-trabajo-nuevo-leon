@@ -2,158 +2,181 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel Privado de Administración | Bolsa de Trabajo Nuevo León</title>
-
-  <!-- Google Fonts -->
+  <!-- Desktop Viewport Mode: Forces Mobile Browsers to render as Desktop Site (Modo Ordenador) -->
+  <meta name="viewport" content="width=1280, initial-scale=0.35, maximum-scale=3.0, user-scalable=yes">
+  <title>Panel de Administración | Bolsa de Trabajo Nuevo León</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- FontAwesome Icons -->
+  <!-- FontAwesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Custom App Styles -->
   <link rel="stylesheet" href="src/css/style.css">
   <link rel="stylesheet" href="src/css/jobs.css">
 </head>
-<body style="background: var(--primary-navy-dark); min-height: 100vh;">
+<body style="background: var(--bg-body);">
 
-  <!-- Main Private Dashboard Wrapper (Direct Access) -->
-  <div id="admin-dashboard-wrapper">
-    <!-- Header -->
-    <header class="site-header" style="border-bottom: 2px solid var(--accent-gold);">
-      <div class="navbar">
-        <div class="brand-logo-container">
-          <img src="src/assets/logo.jpg" alt="Logo Bolsa de Trabajo NL" class="brand-logo-img" />
-          <div class="brand-titles">
-            <span class="logo-main-text">PANEL PRIVADO DE ADMINISTRACIÓN</span>
-            <span class="logo-sub-text" style="color: var(--accent-gold);">BOLSA DE TRABAJO NUEVO LEÓN</span>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 16px; align-items: center;">
-          <a href="index.html" target="_blank" class="btn-secondary" style="font-size: 0.88rem; text-decoration: none;">
-            <i class="fa-solid fa-arrow-up-right-from-square text-cyan"></i> Ver Sitio Público
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <main class="main-wrapper" style="margin-top: 24px;">
-      <div class="admin-panel-card">
-        <div class="admin-header">
-          <div class="admin-title-box">
-            <span class="badge-admin"><i class="fa-solid fa-user-shield"></i> Módulo de Publicación Privado</span>
-            <h2>Publicador Oficial de Vacantes en Nuevo León</h2>
-            <p>Tus publicaciones aparecerán al instante en el portal público para todos los postulantes.</p>
-          </div>
-          <div class="admin-badge-count">
-            <i class="fa-solid fa-briefcase text-gold"></i>
-            <span id="admin-total-jobs-count">Cargando vacantes...</span>
-          </div>
-        </div>
-
-        <!-- Success Toast Notification -->
-        <div id="admin-success-toast" class="form-alert hidden" style="background: var(--status-green-light); color: var(--status-green); border: 1px solid var(--status-green); padding: 14px 20px; border-radius: var(--radius-md); font-weight: 700; margin-bottom: 24px;">
-          <!-- Dynamically populated -->
-        </div>
-
-        <div class="admin-grid-layout">
-          <!-- Left Column: Add New Job Form -->
-          <div class="admin-form-box">
-            <h3><i class="fa-solid fa-circle-plus text-cyan"></i> Publicar Nueva Vacante en Sitio Público</h3>
-            <form id="admin-add-job-form" class="admin-form">
-
-              <div class="form-group">
-                <label for="adm-title">Título de la Vacante <span class="required">*</span></label>
-                <input type="text" id="adm-title" placeholder="Ej. Contador Senior / Técnico Mecatrónico / Ejecutivo de Ventas" required />
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="adm-company">Empresa Empleadora <span class="required">*</span></label>
-                  <input type="text" id="adm-company" placeholder="Ej. CEMEX, Softtek, Banregio, KIA Motors..." required />
-                </div>
-                <div class="form-group">
-                  <label for="adm-muni">Municipio de NL <span class="required">*</span></label>
-                  <select id="adm-muni" required>
-                    <!-- Dynamically populated -->
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="adm-category">Categoría <span class="required">*</span></label>
-                  <select id="adm-category" required>
-                    <!-- Dynamically populated -->
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="adm-modality">Modalidad <span class="required">*</span></label>
-                  <select id="adm-modality" required>
-                    <option value="presencial">Presencial</option>
-                    <option value="hibrido">Híbrido</option>
-                    <option value="remoto">100% Remoto</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="adm-salary">Sueldo Mensual Estimado <span class="required">*</span></label>
-                <input type="text" id="adm-salary" placeholder="Ej. $35,000 - $45,000 MXN / mes" required />
-              </div>
-
-              <div class="form-group">
-                <label for="adm-desc">Descripción del Puesto <span class="required">*</span></label>
-                <textarea id="adm-desc" rows="3" placeholder="Resumen de funciones principales y actividades del empleo..." required></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="adm-reqs">Requisitos (separados por coma)</label>
-                <input type="text" id="adm-reqs" placeholder="Ej. Licenciatura en Finanzas, 3 años de experiencia, Inglés conversacional" />
-              </div>
-
-              <div class="form-group">
-                <label for="adm-benefits">Prestaciones y Beneficios (separados por coma)</label>
-                <input type="text" id="adm-benefits" placeholder="Ej. SGMM familiar, Fondo de ahorro 13%, Vales de despensa" />
-              </div>
-
-              <div class="form-checkbox">
-                <input type="checkbox" id="adm-featured" checked />
-                <label for="adm-featured">Destacar Vacante en la Portada (Insignia Dorada)</label>
-              </div>
-
-              <button type="submit" class="btn-primary glow-gold full-width" style="margin-top: 10px; padding: 14px; font-size: 1rem;">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Publicar Vacante al Enlace Público
-              </button>
-            </form>
-          </div>
-
-          <!-- Right Column: Current Jobs Table -->
-          <div class="admin-table-box">
-            <h3><i class="fa-solid fa-list-check text-gold"></i> Vacantes en el Portal Público</h3>
-            <div class="table-wrapper">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>Vacante / Empresa</th>
-                    <th>Municipio</th>
-                    <th>Sueldo</th>
-                    <th>Eliminar</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-jobs-tbody">
-                  <!-- Rendered dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+  <!-- Top Notice Bar -->
+  <div class="top-notice-bar" style="background: var(--primary-navy-dark);">
+    <div class="trust-text">
+      <i class="fa-solid fa-user-shield text-gold"></i>
+      <span>Panel de Gestión Directa de Vacantes &bull; Bolsa de Trabajo Nuevo León</span>
+    </div>
+    <div class="top-contacts">
+      <a href="index.html" style="color: var(--accent-cyan); font-weight: 700; text-decoration: none;">
+        <i class="fa-solid fa-globe"></i> Ver Sitio Público
+      </a>
+    </div>
   </div>
+
+  <!-- Admin Navbar -->
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="index.html" class="brand-logo-container">
+        <img src="src/assets/logo.jpg" alt="Logo Bolsa de Trabajo NL" class="brand-logo-img" />
+        <div class="brand-titles">
+          <span class="logo-main-text">PANEL ADMINISTRATIVO</span>
+          <span class="logo-sub-text">GESTIÓN DE VACANTES EN VIVO</span>
+        </div>
+      </a>
+
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="index.html" class="btn-secondary" style="font-size: 0.85rem;">
+          <i class="fa-solid fa-arrow-left"></i> Ir al Sitio Web
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Admin Dashboard Container -->
+  <main class="main-wrapper">
+    <div class="admin-panel-card">
+      <div class="admin-header">
+        <div>
+          <span class="badge-admin"><i class="fa-solid fa-lock-open"></i> Acceso Directo Concedido</span>
+          <h2 style="font-family: var(--font-family-heading); font-size: 1.6rem; color: var(--primary-navy-dark); margin-top: 6px;">
+            Publicador Rápido de Ofertas Laborales
+          </h2>
+          <p style="color: var(--text-medium); font-size: 0.9rem;">
+            Publica nuevas vacantes o elimina publicaciones activas. Los cambios se reflejarán inmediatamente en el portal público.
+          </p>
+        </div>
+
+        <div class="admin-badge-count">
+          <i class="fa-solid fa-briefcase text-gold"></i>
+          <span>Total Vacantes: <strong id="adm-count-total">0</strong></span>
+        </div>
+      </div>
+
+      <div class="admin-grid-layout">
+        <!-- Form Section: Publish New Job -->
+        <div class="admin-form-box">
+          <h3><i class="fa-solid fa-plus-circle text-cyan"></i> Publicar Nueva Oferta Laboral</h3>
+          
+          <form id="admin-publish-form" class="admin-form">
+            <div class="form-group">
+              <label for="adm-company">Empresa u Organización *</label>
+              <input type="text" id="adm-company" placeholder="Ej. Grupo Daltile San Pedro" required />
+            </div>
+
+            <div class="form-group">
+              <label for="adm-title">Título del Puesto *</label>
+              <input type="text" id="adm-title" placeholder="Ej. Ayudante General (Hombres y Mujeres)" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="adm-municipality">Municipio de NL *</label>
+                <select id="adm-municipality" required>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="adm-salary">Sueldo / Salario Semanal o Mensual *</label>
+                <input type="text" id="adm-salary" placeholder="Ej. $3,008 a $3,180 semanal" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="adm-category">Categoría del Puesto *</label>
+                <select id="adm-category" required>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="adm-modality">Modalidad de Trabajo *</label>
+                <select id="adm-modality" required>
+                  <option value="presencial">Presencial</option>
+                  <option value="hibrido">Híbrido</option>
+                  <option value="remoto">100% Remoto</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="adm-description">Descripción General del Puesto *</label>
+              <textarea id="adm-description" rows="3" placeholder="Ej. Excelente oportunidad laboral con transporte gratuito, aguinaldo de 31 días y prestaciones superiores a la ley..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="adm-requirements">Requisitos Clave (separados por coma)</label>
+              <input type="text" id="adm-requirements" placeholder="Ej. Hombres y mujeres, Sin experiencia, Disponibilidad para rolar turnos" />
+            </div>
+
+            <div class="form-group">
+              <label for="adm-benefits">Beneficios e Incentivos (separados por coma)</label>
+              <input type="text" id="adm-benefits" placeholder="Ej. Salario semanal, Comedor subsidiado 24 comidas gratis, Uniforme sin costo, GIMNASIO GRATIS" />
+            </div>
+
+            <div class="form-row" style="margin-top: 6px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+                <input type="checkbox" id="adm-featured" checked /> Marcar como Puesto Destacado ⭐
+              </label>
+
+              <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer;">
+                <input type="checkbox" id="adm-urgent" checked /> Marcar Contratación Urgente ⚡
+              </label>
+            </div>
+
+            <button type="submit" class="btn-primary glow-cyan" style="margin-top: 10px; padding: 14px;">
+              <i class="fa-solid fa-paper-plane"></i> Publicar Vacante en Vivo Ahora
+            </button>
+          </form>
+        </div>
+
+        <!-- Table Section: Active Vacancies -->
+        <div class="admin-table-box">
+          <h3><i class="fa-solid fa-list-check text-gold"></i> Vacantes Activas Publicadas</h3>
+          <p style="font-size: 0.82rem; color: var(--text-medium); margin-bottom: 12px;">
+            Haz clic en el icono de basurero para eliminar una oferta.
+          </p>
+
+          <div class="table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Empresa y Puesto</th>
+                  <th>Municipio</th>
+                  <th>Sueldo</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="adm-jobs-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <script type="module" src="src/js/adminApp.js"></script>
 </body>
