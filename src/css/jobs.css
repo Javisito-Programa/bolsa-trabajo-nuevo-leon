@@ -1,5 +1,5 @@
 /* ==========================================================================
-   JOB CATALOG & CARDS STYLES - RESPONSIVE OPTIMIZATIONS
+   JOB CATALOG & CARDS STYLES - ORIGINAL FORMAT WITH CLEAN MOBILE SCALING
    ========================================================================== */
 
 /* Category Pills Bar */
@@ -7,7 +7,7 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 6px 4px 12px 4px;
+  padding: 6px 4px 14px 4px;
   margin-bottom: 24px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
@@ -16,6 +16,7 @@
 .category-pills-bar::-webkit-scrollbar {
   height: 4px;
 }
+
 .category-pills-bar::-webkit-scrollbar-thumb {
   background: var(--accent-cyan);
   border-radius: 4px;
@@ -25,14 +26,14 @@
   background: var(--bg-card);
   color: var(--text-medium);
   border: 1px solid var(--border-color);
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: var(--radius-full);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   transition: all var(--transition-fast);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
@@ -49,14 +50,14 @@
 .job-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
-/* Job Card Styling */
+/* Job Card Styling - Original Format */
 .job-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 20px;
+  padding: 24px;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-md);
   display: flex;
@@ -80,16 +81,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   gap: 8px;
 }
 
 .badge-featured {
   background: var(--accent-gold-light);
   color: var(--accent-gold-dark);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-full);
   border: 1px solid var(--accent-gold);
   display: inline-flex;
@@ -100,9 +101,9 @@
 .badge-urgent {
   background: var(--status-red-light);
   color: var(--status-red);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-full);
   border: 1px solid var(--status-red);
 }
@@ -110,51 +111,61 @@
 .job-company-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
+/* Fixed Compact Company Square Logo */
 .company-logo-square {
-  width: 44px;
-  height: 44px;
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  min-height: 48px !important;
+  max-width: 48px !important;
+  max-height: 48px !important;
   border-radius: var(--radius-md);
   color: #FFFFFF;
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
+.company-info {
+  display: flex;
+  flex-direction: column;
+}
+
 .company-info h4 {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: var(--text-medium);
   font-weight: 700;
 }
 
 .job-card-title {
   font-family: var(--font-family-heading);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--primary-navy-dark);
   line-height: 1.25;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .job-tags-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .loc-badge, .mod-badge {
   background: var(--bg-subtle);
   color: var(--text-medium);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
@@ -162,10 +173,10 @@
 }
 
 .job-card-desc {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--text-medium);
-  line-height: 1.45;
-  margin-bottom: 16px;
+  line-height: 1.5;
+  margin-bottom: 20px;
 
   /* Line Clamp 3 lines */
   display: -webkit-box;
@@ -175,24 +186,23 @@
 }
 
 .job-card-footer {
-  padding-top: 14px;
+  padding-top: 16px;
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 .job-salary-amount {
   font-family: var(--font-family-heading);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--primary-navy-dark);
 }
 
 .job-salary-label {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   display: block;
 }
@@ -201,15 +211,16 @@
   background: var(--primary-navy-dark);
   color: #FFFFFF;
   font-weight: 700;
-  font-size: 0.82rem;
-  padding: 8px 16px;
+  font-size: 0.88rem;
+  padding: 10px 18px;
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
   transition: all var(--transition-fast);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .btn-apply-card:hover {
@@ -298,7 +309,6 @@
   font-weight: 800;
   color: var(--primary-navy-dark);
   line-height: 1.2;
-
 }
 
 .modal-tabs-bar {
@@ -314,7 +324,7 @@
   border: none;
   padding: 10px 12px;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--text-medium);
   cursor: pointer;
   border-bottom: 3px solid transparent;
@@ -365,7 +375,7 @@
   gap: 10px;
 }
 
-/* Responsive Grid Breakpoints */
+/* Clean Responsive Scaling without Deforming Cards */
 @media (max-width: 1024px) {
   .job-cards-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -377,20 +387,18 @@
     grid-template-columns: 1fr;
   }
 
-  .modal-scroll-area {
-    padding: 16px;
+  .job-card {
+    padding: 18px;
   }
 
-  .modal-job-header {
+  .job-card-footer {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
-  .modal-job-title {
-    font-size: 1.15rem;
-  }
-
-  .tab-btn {
-    font-size: 0.78rem;
-    padding: 8px 6px;
+  .btn-apply-card {
+    width: 100%;
+    justify-content: center;
   }
 }
