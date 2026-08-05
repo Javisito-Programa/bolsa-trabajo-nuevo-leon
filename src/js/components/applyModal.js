@@ -1,5 +1,5 @@
 /* ==========================================================================
-   APPLY MODAL COMPONENT WITH 5KM GPS DISTANCE VERIFICATION
+   APPLY MODAL COMPONENT WITH 5KM GPS DISTANCE VERIFICATION & NEAREST STOP REPORTING
    Handles job details preview drawer, 5KM GPS pickup validation & Messenger redirection
    ========================================================================== */
 
@@ -75,7 +75,7 @@ export class ApplyModal {
                 </div>
                 <h3 style="color: var(--primary-navy-dark); font-size: 1.2rem; margin-top: 6px;">Postulación Directa a Messenger</h3>
                 <p style="font-size: 0.85rem; color: var(--text-medium);">
-                  Revisaremos tu ubicación para asignarte la ruta de transporte más cercana (Límite 5 km).
+                  Ingresa tus datos personales. Opcionalmente verifica tu GPS para calcular la distancia a tu parada de transporte más cercana.
                 </p>
               </div>
 
@@ -107,7 +107,7 @@ export class ApplyModal {
                 <!-- GPS Location & 5KM Check Button -->
                 <div class="form-group" style="margin-top: 14px; background: rgba(0,168,232,0.06); padding: 14px; border-radius: var(--radius-md); border: 1px dashed var(--accent-cyan);">
                   <button type="button" id="btn-modal-gps-check" class="btn-secondary full-width" style="padding: 10px; font-weight: 700; font-size: 0.88rem;">
-                    <i class="fa-solid fa-location-crosshairs text-cyan"></i> Detectar mi Ubicación GPS (Verificar Transporte < 5KM)
+                    <i class="fa-solid fa-location-crosshairs text-cyan"></i> Detectar mi Ubicación GPS (Calcular Parada Más Cercana)
                   </button>
                   <div id="modal-gps-result-box" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600;"></div>
                 </div>
@@ -127,7 +127,7 @@ export class ApplyModal {
                 </div>
                 <h3 style="font-size: 1.3rem; color: var(--primary-navy-dark); margin: 12px 0 6px 0;">¡Datos Copiados al Portapapeles!</h3>
                 <p style="font-size: 0.88rem; color: var(--text-medium); margin-bottom: 16px;">
-                  Tus datos y la información de tu transporte fueron copiados. Pégalos en el chat de Messenger que acabamos de abrir.
+                  Tus datos y el reporte de tu transporte fueron copiados. Pégalos en el chat de Messenger que acabamos de abrir.
                 </p>
                 <div class="fb-button-wrap" style="margin: 16px 0;">
                   <a id="btn-reopen-messenger" href="${RECRUITER_MESSENGER_LINK}" target="_blank" rel="noopener noreferrer" class="btn-primary glow-cyan" style="background: #1877F2; color: #FFFFFF; text-decoration: none; padding: 12px 24px;">
@@ -205,12 +205,12 @@ export class ApplyModal {
         if (this.nearestPickupResult) {
           const { route, stop, distance } = this.nearestPickupResult;
           if (distance <= 5.0) {
-            transportInfo = `\n🚌 Parada de Transporte (${distance.toFixed(1)} km): ${route.name} - ${stop.name} (${stop.ta})`;
+            transportInfo = `\n✅ PUNTO DE RECOLECCIÓN CON COBERTURA (a ${distance.toFixed(1)} km de la ruta)\n🚌 Parada más cercana: ${route.name} - ${stop.name} (${stop.ta})`;
           } else {
-            transportInfo = `\n⚠️ NO HAY RECOLECCIÓN A MENOS DE 5KM (Parada más cercana a ${distance.toFixed(1)} km: ${route.name} - ${stop.name})`;
+            transportInfo = `\n⚠️ NO HAY RECOLECCIÓN A MENOS DE 5KM (Parada más cercana a ${distance.toFixed(1)} km de la ruta)\n🚌 Parada más cercana: ${route.name} - ${stop.name} (${stop.ta})`;
           }
         } else {
-          transportInfo = `\n🚌 Transporte: Solicito verificar parada más cercana al contactar.`;
+          transportInfo = `\n🚌 Transporte: Favor de verificar mi parada más cercana al contactarme.`;
         }
 
         const messageText = `Hola, me interesa postularme a la vacante:\n📌 Vacante: ${jobTitle}\n👤 Nombre Completo: ${fullName}\n📞 Teléfono: ${phone}${transportInfo}`;
@@ -256,7 +256,6 @@ export class ApplyModal {
         if (gpsBtn) gpsBtn.disabled = false;
       },
       (err) => {
-        // Fallback to Monterrey
         this.calculateNearestPickup(25.6866, -100.3161);
         if (gpsBtn) gpsBtn.disabled = false;
       },
@@ -288,7 +287,7 @@ export class ApplyModal {
     if (minDistance <= 5.0) {
       resultBox.innerHTML = `
         <div style="background: rgba(16,185,129,0.1); color: var(--status-green); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--status-green);">
-          <i class="fa-solid fa-circle-check"></i> <strong>Recolección Disponible (${minDistance.toFixed(1)} km)</strong><br>
+          <i class="fa-solid fa-circle-check"></i> <strong>Punto de recolección a ${minDistance.toFixed(1)} km</strong><br>
           ${closestRoute.name} &bull; ${closestStop.name} (${closestStop.ta})
         </div>
       `;
@@ -296,7 +295,7 @@ export class ApplyModal {
       resultBox.innerHTML = `
         <div style="background: rgba(239,68,68,0.1); color: var(--status-red); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--status-red);">
           <i class="fa-solid fa-triangle-exclamation"></i> <strong>NO HAY RECOLECCIÓN A MENOS DE 5KM</strong><br>
-          La parada más cercana está a ${minDistance.toFixed(1)} km (${closestStop.name}).
+          Parada más cercana a ${minDistance.toFixed(1)} km de la ruta (${closestStop.name}).
         </div>
       `;
     }

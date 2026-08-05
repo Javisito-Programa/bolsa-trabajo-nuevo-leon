@@ -53,8 +53,8 @@
       <!-- Navigation Links -->
       <ul class="nav-links">
         <li><a href="#" class="nav-link active"><i class="fa-solid fa-house"></i> Inicio</a></li>
-        <li><a href="#transport-map-mount" class="nav-link"><i class="fa-solid fa-bus"></i> Rutas de Transporte</a></li>
         <li><a href="#jobs-section-mount" class="nav-link"><i class="fa-solid fa-briefcase"></i> Vacantes Activas</a></li>
+        <li><a href="#transport-map-mount" class="nav-link"><i class="fa-solid fa-bus"></i> Rutas de Transporte</a></li>
         <li>
           <a href="https://m.me/61593038273758" target="_blank" rel="noopener noreferrer" class="btn-publish-job" style="text-decoration: none;">
             <i class="fa-brands fa-facebook-messenger"></i> Contactar por Messenger
@@ -120,16 +120,16 @@
     <div class="hero-mountain-bg"></div>
   </section>
 
-  <!-- Main Content Layout -->
+  <!-- Main Content Layout (PRIMARY: Job Catalog, SECONDARY: Transport Map) -->
   <main class="main-wrapper">
-    <!-- Interactive Personal Transport Map & Geolocation Locator -->
-    <section id="transport-map-mount">
-      <!-- Injected by mapRenderer.js -->
-    </section>
-
-    <!-- Job Catalog Mount Point -->
+    <!-- 1. PRIMARY SECTION: Job Catalog Mount Point -->
     <section id="jobs-section-mount">
       <!-- Injected by jobList.js -->
+    </section>
+
+    <!-- 2. SECONDARY SECTION: Interactive Personal Transport Map & Geolocation Locator -->
+    <section id="transport-map-mount">
+      <!-- Injected by mapRenderer.js -->
     </section>
   </main>
 
