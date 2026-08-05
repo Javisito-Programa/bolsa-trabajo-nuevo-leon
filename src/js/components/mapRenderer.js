@@ -1,375 +1,314 @@
 /* ==========================================================================
-   MAP RENDERER COMPONENT - NUEVO LEÓN VIBRANT MULTI-COLOR VECTOR MAP
-   Inspired by user reference image: Every municipality is an interactive button
+   INTERACTIVE TRANSPORT MAP & GEOLOCATION PICKUP LOCATOR COMPONENT
+   Uses Leaflet.js & HTML5 Geolocation to find nearest pickup points in NL
    ========================================================================== */
 
-import { MUNICIPALITIES, REGIONS } from '../data/municipalities.js';
+import { TRANSPORT_ROUTES } from '../data/routesData.js';
+import { ApplyModal, RECRUITER_MESSENGER_LINK } from './applyModal.js';
 
-export class MapRenderer {
+export class TransportMapRenderer {
   constructor(containerId, options = {}) {
     this.container = document.getElementById(containerId);
-    this.onSelectMunicipality = options.onSelectMunicipality || (() => {});
-    this.onSelectRegion = options.onSelectRegion || (() => {});
-    this.activeMunicipalityId = null;
-    this.activeRegionId = 'all';
+    this.options = options;
+    this.map = null;
+    this.markers = [];
+    this.userLocationMarker = null;
+    this.nearestStop = null;
 
     this.init();
   }
 
   init() {
     if (!this.container) return;
-    this.renderContainerStructure();
-    this.renderSVGMap();
-    this.setupEventListeners();
+    this.renderLayout();
+    this.initLeafletMap();
+    this.setupListeners();
   }
 
-  renderContainerStructure() {
+  renderLayout() {
     this.container.innerHTML = `
-      <div class="map-card-wrapper">
-        <div class="map-header">
+      <div class="transport-map-card">
+        <div class="map-card-header">
           <div class="map-title-box">
-            <span class="badge-tag glow-cyan"><i class="fa-solid fa-map-location-dot"></i> Mapa Interactivo por Municipios</span>
-            <h2>Selecciona un Municipio de Nuevo León</h2>
-            <p>Haz clic en cualquier municipio del mapa para ver las ofertas de empleo exclusivas</p>
+            <span class="badge-tag glow-cyan"><i class="fa-solid fa-bus-simple"></i> Transporte Gratuito de Personal</span>
+            <h2>Mapa Interactivo de Rutas y Puntos de Abordo en NL</h2>
+            <p>Nuestras unidades te recogen cerca de tu domicilio y te llevan directo a tu entrevista y planta de trabajo.</p>
           </div>
-
-          <div class="map-search-box">
-            <div class="input-with-icon">
-              <i class="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" id="map-search-input" placeholder="Buscar municipio (ej. Monterrey, San Pedro, Apodaca)..." autocomplete="off" />
-              <button id="map-search-clear" class="clear-btn hidden" title="Limpiar"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="map-search-results" class="search-dropdown hidden"></div>
-          </div>
-        </div>
-
-        <!-- Region Filter Pills -->
-        <div class="region-filters" id="region-filters-bar">
-          <button class="region-pill active" data-region="all">
-            <span class="dot" style="background: var(--accent-cyan);"></span> Todo Nuevo León (51)
+          
+          <button id="btn-detect-location" class="btn-primary glow-gold" style="padding: 14px 24px; font-size: 1rem;">
+            <i class="fa-solid fa-location-crosshairs"></i> Detectar mi Ubicación y Buscar Parada Más Cercana
           </button>
-          ${Object.values(REGIONS).map(r => `
-            <button class="region-pill" data-region="${r.id}">
-              <span class="dot" style="background: ${r.color}"></span> ${r.name}
-            </button>
-          `).join('')}
         </div>
 
-        <!-- Main Map Interactive Canvas -->
-        <div class="map-canvas-container">
-          <div class="map-badge-info" id="map-active-badge">
-            <i class="fa-solid fa-location-crosshairs text-gold"></i>
-            <span id="map-badge-text">Haz clic en un botón-municipio para filtrar empleos</span>
+        <!-- Filter Controls -->
+        <div class="map-filter-bar">
+          <div class="filter-group">
+            <label for="map-route-select"><i class="fa-solid fa-route text-cyan"></i> Seleccionar Ruta:</label>
+            <select id="map-route-select">
+              <option value="all">Ver todas las Rutas (R-1 a R-15)</option>
+              ${TRANSPORT_ROUTES.map(r => `<option value="${r.id}">${r.name} (${r.municipality})</option>`).join('')}
+            </select>
           </div>
-
-          <div class="map-zoom-controls">
-            <button id="map-reset-btn" title="Restablecer Vista"><i class="fa-solid fa-rotate-left"></i> Ver Todo NL</button>
-          </div>
-
-          <!-- Vector SVG Map of Nuevo León with Multi-color Municipalities -->
-          <div class="svg-wrapper" id="svg-map-wrapper">
-            <!-- Dynamically rendered -->
-          </div>
-
-          <!-- Floating Tooltip -->
-          <div id="map-tooltip" class="map-tooltip hidden">
-            <div class="tooltip-header">
-              <span class="tooltip-title" id="tt-name">Monterrey</span>
-              <span class="tooltip-badge" id="tt-region">Metropolitana</span>
-            </div>
-            <div class="tooltip-body">
-              <div class="tooltip-stat">
-                <i class="fa-solid fa-briefcase text-gold"></i>
-                <strong id="tt-jobs">4,820</strong> vacantes activas
-              </div>
-              <p class="tooltip-desc" id="tt-desc">Capital industrial y financiera de Nuevo León.</p>
-              <div class="tooltip-tags" id="tt-industries"></div>
-            </div>
-            <div class="tooltip-footer">
-              <span>Haz clic para ver ofertas <i class="fa-solid fa-arrow-right"></i></span>
-            </div>
+          
+          <div id="location-status-badge" class="location-status-badge">
+            <i class="fa-solid fa-circle-info text-cyan"></i> Haz clic en "Detectar mi Ubicación" para encontrar tu parada más cercana.
           </div>
         </div>
 
-        <!-- Quick Municipality Selector Dropdown for Accessibility -->
-        <div class="quick-muni-bar">
-          <label for="quick-muni-select"><i class="fa-solid fa-list-check"></i> Seleccionar por lista:</label>
-          <select id="quick-muni-select">
-            <option value="all">Ver todo Nuevo León (51 Municipios)</option>
-            ${MUNICIPALITIES.map(m => `<option value="${m.id}">${m.name} (${m.totalJobs} vacantes)</option>`).join('')}
-          </select>
+        <!-- Map Container -->
+        <div id="transport-map-container" class="map-canvas-container" style="height: 480px; width: 100%; border-radius: var(--radius-lg); border: 2px solid rgba(0,168,232,0.3); overflow: hidden; position: relative;"></div>
+
+        <!-- Nearest Stop Result Card -->
+        <div id="nearest-stop-result-card" class="nearest-result-card hidden">
+          <!-- Dynamically populated when location detected -->
         </div>
       </div>
     `;
   }
 
-  renderSVGMap() {
-    const svgWrapper = document.getElementById('svg-map-wrapper');
-    if (!svgWrapper) return;
+  initLeafletMap() {
+    // Check if Leaflet is loaded
+    if (typeof L === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = () => this.buildMapInstance();
+      document.head.appendChild(script);
 
-    // Multicolor SVG Map based on provided reference image
-    const svgContent = `
-      <svg id="nl-svg-map" viewBox="0 0 900 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-        <!-- Map Outline -->
-        <path class="nl-state-bg" d="
-          M 380,80 L 450,110 L 520,240 L 580,270 L 670,330 L 740,400 L 710,480 L 620,600 L 600,720
-          L 560,880 L 470,950 L 440,860 L 440,730 L 420,630 L 320,530 L 300,420 L 330,300 L 350,180 Z
-        " fill="rgba(13, 45, 76, 0.05)" stroke="rgba(255, 255, 255, 0.2)" stroke-width="3" />
-
-        <!-- Compass Rose in Top Left matching user map image -->
-        <g transform="translate(70, 70)">
-          <circle cx="0" cy="0" r="28" fill="#FFFFFF" stroke="#0D2D4C" stroke-width="2"/>
-          <text x="0" y="-32" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFFFFF">N</text>
-          <text x="0" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFFFFF">S</text>
-          <text x="-40" y="4" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFFFFF">O</text>
-          <text x="40" y="4" text-anchor="middle" font-size="12" font-weight="bold" fill="#FFFFFF">E</text>
-          <polygon points="0,-22 5,-4 0,0 -5,-4" fill="#E60000"/>
-          <polygon points="0,22 5,4 0,0 -5,4" fill="#0D2D4C"/>
-          <polygon points="22,0 4,5 0,0 4,-5" fill="#0D2D4C"/>
-          <polygon points="-22,0 -4,5 0,0 -4,-5" fill="#0D2D4C"/>
-        </g>
-
-        <!-- Municipalities Vector Node Buttons -->
-        <g id="municipalities-group">
-          ${MUNICIPALITIES.map(m => {
-            const { x, y, r } = m.coords;
-            const size = Math.max(r * 2.2, 40);
-            const isHub = m.totalJobs > 1500;
-
-            return `
-              <g class="municipality-node" data-id="${m.id}" data-region="${m.region}" tabIndex="0" role="button" aria-label="${m.name}">
-                <!-- Outer Pulse Ring -->
-                <circle class="muni-glow-ring" cx="${x}" cy="${y}" r="${size / 2 + 8}" fill="${m.color}" opacity="0.25"></circle>
-
-                <!-- Municipality Interactive Button Shape -->
-                <rect class="muni-shape" x="${x - size/2}" y="${y - size/2}" width="${size}" height="${size}" rx="12"
-                      fill="${m.color}" stroke="#FFFFFF" stroke-width="2.5"
-                      data-id="${m.id}" />
-
-                ${m.isCapital ? `<text x="${x}" y="${y - size/2 - 8}" text-anchor="middle" fill="#FFD700" font-size="13" font-weight="800">★ CAPITAL</text>` : ''}
-
-                <!-- Text Label inside button -->
-                <text x="${x}" y="${y - 4}" class="muni-label-name" text-anchor="middle" font-size="${isHub ? '13' : '11'}" font-weight="800" fill="#FFFFFF" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">
-                  ${m.name.length > 13 ? m.name.substring(0, 11) + '...' : m.name}
-                </text>
-                <text x="${x}" y="${y + 13}" class="muni-label-count" text-anchor="middle" font-size="10" font-weight="700" fill="#FFFFFF" style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">
-                  ${m.totalJobs.toLocaleString()} vacantes
-                </text>
-              </g>
-            `;
-          }).join('')}
-        </g>
-      </svg>
-    `;
-
-    svgWrapper.innerHTML = svgContent;
-  }
-
-  setupEventListeners() {
-    const tooltip = document.getElementById('map-tooltip');
-    const nodes = this.container.querySelectorAll('.municipality-node');
-    const regionPills = this.container.querySelectorAll('.region-pill');
-    const searchInput = document.getElementById('map-search-input');
-    const searchClear = document.getElementById('map-search-clear');
-    const searchResults = document.getElementById('map-search-results');
-    const quickSelect = document.getElementById('quick-muni-select');
-    const resetBtn = document.getElementById('map-reset-btn');
-
-    // 1. Mouse interactions on Map Nodes
-    nodes.forEach(node => {
-      const id = node.getAttribute('data-id');
-      const muniData = MUNICIPALITIES.find(m => m.id === id);
-
-      node.addEventListener('mouseenter', (e) => {
-        this.showTooltip(e, muniData, tooltip);
-        node.classList.add('hovered');
-      });
-
-      node.addEventListener('mousemove', (e) => {
-        this.positionTooltip(e, tooltip);
-      });
-
-      node.addEventListener('mouseleave', () => {
-        tooltip.classList.add('hidden');
-        node.classList.remove('hovered');
-      });
-
-      node.addEventListener('click', () => {
-        this.selectMunicipality(id);
-      });
-    });
-
-    // 2. Region Pills Click
-    regionPills.forEach(pill => {
-      pill.addEventListener('click', () => {
-        regionPills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-        const region = pill.getAttribute('data-region');
-        this.filterByRegion(region);
-      });
-    });
-
-    // 3. Search Input Filtering
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        if (query.length > 0) {
-          searchClear.classList.remove('hidden');
-          this.renderSearchResults(query, searchResults);
-        } else {
-          searchClear.classList.add('hidden');
-          searchResults.classList.add('hidden');
-        }
-      });
-    }
-
-    if (searchClear) {
-      searchClear.addEventListener('click', () => {
-        searchInput.value = '';
-        searchClear.classList.add('hidden');
-        searchResults.classList.add('hidden');
-      });
-    }
-
-    // 4. Quick Select Dropdown
-    if (quickSelect) {
-      quickSelect.addEventListener('change', (e) => {
-        const val = e.target.value;
-        if (val === 'all') {
-          this.clearSelection();
-        } else {
-          this.selectMunicipality(val);
-        }
-      });
-    }
-
-    // 5. Reset View Button
-    if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
-        this.clearSelection();
-      });
-    }
-  }
-
-  showTooltip(event, data, tooltip) {
-    if (!tooltip || !data) return;
-
-    const regionObj = REGIONS[data.region];
-    document.getElementById('tt-name').innerText = data.name;
-    document.getElementById('tt-region').innerText = regionObj.name;
-    document.getElementById('tt-region').style.backgroundColor = data.color;
-    document.getElementById('tt-jobs').innerText = data.totalJobs.toLocaleString();
-    document.getElementById('tt-desc').innerText = data.description;
-
-    const indContainer = document.getElementById('tt-industries');
-    indContainer.innerHTML = data.topIndustries.slice(0, 3).map(ind => `
-      <span class="tt-tag"><i class="fa-solid fa-check text-cyan"></i> ${ind}</span>
-    `).join('');
-
-    tooltip.classList.remove('hidden');
-    this.positionTooltip(event, tooltip);
-  }
-
-  positionTooltip(event, tooltip) {
-    const rect = this.container.querySelector('.map-canvas-container').getBoundingClientRect();
-    let x = event.clientX - rect.left + 15;
-    let y = event.clientY - rect.top - 10;
-
-    if (x + 280 > rect.width) x = event.clientX - rect.left - 290;
-    if (y + 180 > rect.height) y = event.clientY - rect.top - 190;
-
-    tooltip.style.left = `${Math.max(10, x)}px`;
-    tooltip.style.top = `${Math.max(10, y)}px`;
-  }
-
-  selectMunicipality(id) {
-    this.activeMunicipalityId = id;
-    const data = MUNICIPALITIES.find(m => m.id === id);
-
-    // Highlight node on map
-    const nodes = this.container.querySelectorAll('.municipality-node');
-    nodes.forEach(n => {
-      if (n.getAttribute('data-id') === id) {
-        n.classList.add('selected');
-      } else {
-        n.classList.remove('selected');
-      }
-    });
-
-    // Update badge text
-    const badgeText = document.getElementById('map-badge-text');
-    if (badgeText && data) {
-      badgeText.innerHTML = `Mostrando empleos para: <strong class="text-gold">${data.name}</strong> (${data.totalJobs} vacantes)`;
-    }
-
-    // Update Quick Select
-    const quickSelect = document.getElementById('quick-muni-select');
-    if (quickSelect) quickSelect.value = id;
-
-    // Trigger callback to update jobs list
-    this.onSelectMunicipality(id, data);
-  }
-
-  filterByRegion(regionId) {
-    this.activeRegionId = regionId;
-    const nodes = this.container.querySelectorAll('.municipality-node');
-
-    nodes.forEach(n => {
-      const reg = n.getAttribute('data-region');
-      if (regionId === 'all' || reg === regionId) {
-        n.style.opacity = '1';
-        n.style.pointerEvents = 'auto';
-      } else {
-        n.style.opacity = '0.25';
-      }
-    });
-
-    this.onSelectRegion(regionId);
-  }
-
-  clearSelection() {
-    this.activeMunicipalityId = null;
-    const nodes = this.container.querySelectorAll('.municipality-node');
-    nodes.forEach(n => n.classList.remove('selected'));
-
-    const badgeText = document.getElementById('map-badge-text');
-    if (badgeText) badgeText.innerHTML = 'Haz clic en un botón-municipio para filtrar empleos';
-
-    const quickSelect = document.getElementById('quick-muni-select');
-    if (quickSelect) quickSelect.value = 'all';
-
-    this.onSelectMunicipality(null, null);
-  }
-
-  renderSearchResults(query, dropdown) {
-    const matches = MUNICIPALITIES.filter(m =>
-      m.name.toLowerCase().includes(query) ||
-      m.topIndustries.some(i => i.toLowerCase().includes(query))
-    );
-
-    if (matches.length === 0) {
-      dropdown.innerHTML = `<div class="search-item-empty">No se encontró municipio con "${query}"</div>`;
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
     } else {
-      dropdown.innerHTML = matches.map(m => `
-        <div class="search-item" data-id="${m.id}">
-          <div class="search-item-name">${m.name}</div>
-          <div class="search-item-meta">
-            <span class="region-badge" style="background: ${m.color}">${REGIONS[m.region].name}</span>
-            <span>${m.totalJobs} vacantes</span>
-          </div>
-        </div>
-      `).join('');
+      this.buildMapInstance();
+    }
+  }
 
-      dropdown.querySelectorAll('.search-item').forEach(item => {
-        item.addEventListener('click', () => {
-          const id = item.getAttribute('data-id');
-          this.selectMunicipality(id);
-          dropdown.classList.add('hidden');
-          document.getElementById('map-search-input').value = '';
+  buildMapInstance() {
+    const mapElement = document.getElementById('transport-map-container');
+    if (!mapElement) return;
+
+    // Centered around Monterrey Metropolitan Area
+    this.map = L.map('transport-map-container').setView([25.7200, -100.1800], 11);
+
+    // OpenStreetMap CartoDB Dark/Light Tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(this.map);
+
+    this.plotAllRoutes();
+  }
+
+  plotAllRoutes(filteredRouteId = 'all') {
+    if (!this.map) return;
+
+    // Clear existing markers
+    this.markers.forEach(m => this.map.removeLayer(m));
+    this.markers = [];
+
+    const routes = filteredRouteId === 'all' 
+      ? TRANSPORT_ROUTES 
+      : TRANSPORT_ROUTES.filter(r => r.id === filteredRouteId);
+
+    routes.forEach(route => {
+      route.stops.forEach(stop => {
+        const marker = L.circleMarker([stop.lat, stop.lng], {
+          radius: 8,
+          fillColor: route.color || '#00A8E8',
+          color: '#FFFFFF',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.9
+        }).addTo(this.map);
+
+        const popupContent = `
+          <div style="font-family: sans-serif; padding: 4px; max-width: 260px;">
+            <strong style="color: #081B2F; font-size: 0.95rem; display: block;">${route.name}</strong>
+            <span style="font-size: 0.8rem; color: #00A8E8; font-weight: 700; display: block; margin-bottom: 6px;">
+              Parada #${stop.id}: ${stop.name}
+            </span>
+            <div style="font-size: 0.78rem; background: #F0F6FF; padding: 6px 10px; border-radius: 6px; margin-bottom: 8px;">
+              <strong>Horarios de salida:</strong><br>
+              ☀️ Turno A: ${stop.ta} | 🌤️ Turno B: ${stop.tb} | 🌙 Turno C: ${stop.tc}
+            </div>
+            <button class="btn-select-stop-trigger" data-route="${route.name}" data-stop="${stop.name}" style="background: #1877F2; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.8rem;">
+              <i class="fa-brands fa-facebook-messenger"></i> Elegir esta Parada e Ir a Messenger
+            </button>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent);
+        this.markers.push(marker);
+      });
+    });
+
+    // Listen for popup trigger buttons inside map
+    this.map.on('popupopen', () => {
+      document.querySelectorAll('.btn-select-stop-trigger').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const rName = btn.getAttribute('data-route');
+          const sName = btn.getAttribute('data-stop');
+          this.applyWithSelectedStop(rName, sName);
         });
       });
+    });
+  }
+
+  setupListeners() {
+    const detectBtn = document.getElementById('btn-detect-location');
+    const routeSelect = document.getElementById('map-route-select');
+
+    if (detectBtn) {
+      detectBtn.addEventListener('click', () => this.detectUserLocation());
     }
 
-    dropdown.classList.remove('hidden');
+    if (routeSelect) {
+      routeSelect.addEventListener('change', (e) => {
+        this.plotAllRoutes(e.target.value);
+      });
+    }
+  }
+
+  detectUserLocation() {
+    const statusBadge = document.getElementById('location-status-badge');
+    const detectBtn = document.getElementById('btn-detect-location');
+
+    if (!navigator.geolocation) {
+      alert('Tu navegador no soporta geolocalización.');
+      return;
+    }
+
+    if (statusBadge) {
+      statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gold"></i> Obteniendo tu ubicación GPS...`;
+    }
+    if (detectBtn) detectBtn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const userLat = pos.coords.latitude;
+        const userLng = pos.coords.longitude;
+
+        this.handleUserLocationFound(userLat, userLng);
+
+        if (detectBtn) detectBtn.disabled = false;
+      },
+      (err) => {
+        console.warn('Geolocation error:', err);
+        // Fallback: Default to Monterrey Center if permission denied
+        this.handleUserLocationFound(25.6866, -100.3161, true);
+
+        if (statusBadge) {
+          statusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-gold"></i> Ubicación aproximada (Monterrey). Selecciona tu ruta en el mapa.`;
+        }
+        if (detectBtn) detectBtn.disabled = false;
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }
+
+  handleUserLocationFound(userLat, userLng, isFallback = false) {
+    if (!this.map) return;
+
+    // Find nearest stop across all routes using Haversine formula
+    let closestStop = null;
+    let closestRoute = null;
+    let minDistance = Infinity;
+
+    TRANSPORT_ROUTES.forEach(route => {
+      route.stops.forEach(stop => {
+        const dist = this.calculateHaversineDistance(userLat, userLng, stop.lat, stop.lng);
+        if (dist < minDistance) {
+          minDistance = dist;
+          closestStop = stop;
+          closestRoute = route;
+        }
+      });
+    });
+
+    this.nearestStop = { route: closestRoute, stop: closestStop, distance: minDistance };
+
+    // Center map on user location
+    this.map.setView([userLat, userLng], 14);
+
+    // Render user location pin
+    if (this.userLocationMarker) this.map.removeLayer(this.userLocationMarker);
+    this.userLocationMarker = L.circleMarker([userLat, userLng], {
+      radius: 10,
+      fillColor: '#3B82F6',
+      color: '#FFFFFF',
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 1
+    }).addTo(this.map).bindPopup('<b>📍 Tu Ubicación Actual</b>').openPopup();
+
+    // Render nearest result card below map
+    const resultCard = document.getElementById('nearest-stop-result-card');
+    const statusBadge = document.getElementById('location-status-badge');
+
+    if (statusBadge && !isFallback) {
+      statusBadge.innerHTML = `<i class="fa-solid fa-circle-check text-green"></i> ¡Ubicación detectada exitosamente! Parada más cercana encontrada.`;
+    }
+
+    if (resultCard && closestStop && closestRoute) {
+      resultCard.classList.remove('hidden');
+      resultCard.innerHTML = `
+        <div class="nearest-stop-box" style="background: linear-gradient(135deg, #081B2F 0%, #0D2847 100%); color: #fff; padding: 24px; border-radius: var(--radius-lg); border: 2px solid var(--accent-gold); margin-top: 20px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center;">
+          <div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(229,169,60,0.2); color: var(--accent-gold); padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.82rem; font-weight: 800; margin-bottom: 8px;">
+              <i class="fa-solid fa-star"></i> PUNTO DE ABORDO MÁS CERCANO A TI (${minDistance.toFixed(1)} km)
+            </div>
+            <h3 style="font-family: var(--font-family-heading); font-size: 1.3rem; margin-bottom: 6px; color: #fff;">
+              ${closestRoute.name}
+            </h3>
+            <p style="font-size: 1rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 10px;">
+              <i class="fa-solid fa-location-dot"></i> Parada #${closestStop.id}: ${closestStop.name}
+            </p>
+            <div style="display: flex; gap: 16px; font-size: 0.85rem; color: rgba(255,255,255,0.85);">
+              <span><i class="fa-solid fa-sun text-gold"></i> Turno A: ${closestStop.ta}</span>
+              <span><i class="fa-solid fa-cloud-sun text-cyan"></i> Turno B: ${closestStop.tb}</span>
+              <span><i class="fa-solid fa-moon text-purple"></i> Turno C: ${closestStop.tc}</span>
+            </div>
+          </div>
+
+          <div>
+            <button id="btn-apply-with-nearest-stop" class="btn-primary glow-gold" style="padding: 14px 24px; font-size: 0.95rem; white-space: nowrap;">
+              <i class="fa-brands fa-facebook-messenger"></i> Postularme con este Punto de Abordo
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('btn-apply-with-nearest-stop').addEventListener('click', () => {
+        this.applyWithSelectedStop(closestRoute.name, closestStop.name);
+      });
+    }
+  }
+
+  applyWithSelectedStop(routeName, stopName) {
+    const messageText = `Hola, me interesa postularme.\n🚌 Punto de Abordo de Transporte: ${routeName} - ${stopName}\n👤 Mi nombre es:\n📞 Mi teléfono es:`;
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(messageText).catch(() => {});
+    }
+
+    alert(`¡Punto de abordo seleccionado!\n"${routeName} - ${stopName}"\n\nCopiamos esta información. Ahora te redirigiremos al chat de Messenger.`);
+    window.open(RECRUITER_MESSENGER_LINK, '_blank');
+  }
+
+  calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth radius in km
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  deg2rad(deg) {
+    return deg * (Math.PI / 180);
   }
 }
