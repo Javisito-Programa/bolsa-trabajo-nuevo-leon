@@ -1,6 +1,6 @@
 /* ==========================================================================
    INTERACTIVE TRANSPORT MAP & GEOLOCATION PICKUP LOCATOR COMPONENT
-   Uses Leaflet.js & HTML5 Geolocation to find nearest pickup points in NL
+   Uses Leaflet.js & HTML5 Geolocation to find nearest pickup points in NL with 5KM Limit
    ========================================================================== */
 
 import { TRANSPORT_ROUTES } from '../data/routesData.js';
@@ -32,7 +32,7 @@ export class TransportMapRenderer {
           <div class="map-title-box">
             <span class="badge-tag glow-cyan"><i class="fa-solid fa-bus-simple"></i> Transporte Gratuito de Personal</span>
             <h2>Mapa Interactivo de Rutas y Puntos de Abordo en NL</h2>
-            <p>Nuestras unidades te recogen cerca de tu domicilio y te llevan directo a tu entrevista y planta de trabajo. <strong>¡Favor de estar 10 minutos antes!</strong></p>
+            <p>Nuestras unidades te recogen cerca de tu domicilio (límite 5 km) y te llevan directo a tu entrevista. <strong>¡Favor de estar 10 minutos antes!</strong></p>
           </div>
           
           <button id="btn-detect-location" class="btn-primary glow-gold" style="padding: 14px 24px; font-size: 1rem;">
@@ -51,7 +51,7 @@ export class TransportMapRenderer {
           </div>
           
           <div id="location-status-badge" class="location-status-badge">
-            <i class="fa-solid fa-circle-info text-cyan"></i> Haz clic en "Detectar mi Ubicación" para encontrar tu parada más cercana.
+            <i class="fa-solid fa-circle-info text-cyan"></i> Haz clic en "Detectar mi Ubicación" para verificar tu distancia al transporte.
           </div>
         </div>
 
@@ -183,7 +183,7 @@ export class TransportMapRenderer {
     }
 
     if (statusBadge) {
-      statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gold"></i> Obteniendo tu ubicación GPS...`;
+      statusBadge.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-gold"></i> Calculando distancia GPS a las paradas...`;
     }
     if (detectBtn) detectBtn.disabled = true;
 
@@ -199,7 +199,7 @@ export class TransportMapRenderer {
         console.warn('Geolocation error:', err);
         this.handleUserLocationFound(25.6866, -100.3161, true);
         if (statusBadge) {
-          statusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-gold"></i> Ubicación aproximada (Monterrey). Selecciona tu parada en el mapa.`;
+          statusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-gold"></i> Ubicación aproximada. Selecciona tu parada en el mapa.`;
         }
         if (detectBtn) detectBtn.disabled = false;
       },
@@ -232,18 +232,24 @@ export class TransportMapRenderer {
     if (this.userLocationMarker) this.map.removeLayer(this.userLocationMarker);
     this.userLocationMarker = L.circleMarker([userLat, userLng], {
       radius: 10,
-      fillColor: '#3B82F6',
+      fillColor: minDistance <= 5.0 ? '#10B981' : '#EF4444',
       color: '#FFFFFF',
       weight: 3,
       opacity: 1,
       fillOpacity: 1
-    }).addTo(this.map).bindPopup('<b>📍 Tu Ubicación Actual</b>').openPopup();
+    }).addTo(this.map).bindPopup(`<b>📍 Tu Ubicación Actual</b><br>${minDistance <= 5.0 ? '✅ Cobertura disponible' : '⚠️ Sin parada < 5km'}`).openPopup();
 
     const resultCard = document.getElementById('nearest-stop-result-card');
     const statusBadge = document.getElementById('location-status-badge');
 
+    const isWithin5Km = minDistance <= 5.0;
+
     if (statusBadge && !isFallback) {
-      statusBadge.innerHTML = `<i class="fa-solid fa-circle-check text-green"></i> ¡Ubicación GPS detectada! Punto de abordo más cercano encontrado.`;
+      if (isWithin5Km) {
+        statusBadge.innerHTML = `<i class="fa-solid fa-circle-check text-green"></i> ¡Recolección disponible! Parada encontrada a ${minDistance.toFixed(1)} km.`;
+      } else {
+        statusBadge.innerHTML = `<i class="fa-solid fa-circle-xmark text-red"></i> ⚠️ NO HAY RECOLECCIÓN A MENOS DE 5KM (Parada más cercana a ${minDistance.toFixed(1)} km).`;
+      }
     }
 
     if (resultCard && closestStop && closestRoute) {
@@ -255,11 +261,17 @@ export class TransportMapRenderer {
         </a>
       ` : '';
 
+      const badgeBg = isWithin5Km ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.25)';
+      const badgeColor = isWithin5Km ? 'var(--status-green)' : '#FF4D4D';
+      const badgeText = isWithin5Km 
+        ? `<i class="fa-solid fa-circle-check"></i> PUNTO DE ABORDO DISPONIBLE A ${minDistance.toFixed(1)} KM`
+        : `<i class="fa-solid fa-triangle-exclamation"></i> ⚠️ NO HAY RECOLECCIÓN A MENOS DE 5KM (Más cercana a ${minDistance.toFixed(1)} km)`;
+
       resultCard.innerHTML = `
-        <div class="nearest-stop-box" style="background: linear-gradient(135deg, #081B2F 0%, #0D2847 100%); color: #fff; padding: 24px; border-radius: var(--radius-lg); border: 2px solid var(--accent-gold); margin-top: 20px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center;">
+        <div class="nearest-stop-box" style="background: linear-gradient(135deg, #081B2F 0%, #0D2847 100%); color: #fff; padding: 24px; border-radius: var(--radius-lg); border: 2px solid ${isWithin5Km ? 'var(--status-green)' : 'var(--status-red)'}; margin-top: 20px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center;">
           <div>
-            <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(229,169,60,0.2); color: var(--accent-gold); padding: 4px 12px; border-radius: var(--radius-full); font-size: 0.82rem; font-weight: 800; margin-bottom: 8px;">
-              <i class="fa-solid fa-star"></i> PUNTO DE ABORDO MÁS CERCANO (${minDistance.toFixed(1)} km)
+            <div style="display: inline-flex; align-items: center; gap: 8px; background: ${badgeBg}; color: ${badgeColor}; padding: 6px 14px; border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 800; margin-bottom: 10px;">
+              ${badgeText}
             </div>
             <h3 style="font-family: var(--font-family-heading); font-size: 1.3rem; margin-bottom: 6px; color: #fff;">
               ${closestRoute.name}
@@ -274,27 +286,34 @@ export class TransportMapRenderer {
           </div>
 
           <div>
-            <button id="btn-apply-with-nearest-stop" class="btn-primary glow-gold" style="padding: 14px 24px; font-size: 0.95rem; white-space: nowrap;">
-              <i class="fa-brands fa-facebook-messenger"></i> Postularme con este Punto de Abordo
+            <button id="btn-apply-with-nearest-stop" class="btn-primary ${isWithin5Km ? 'glow-gold' : ''}" style="background: ${isWithin5Km ? '#1877F2' : '#DC2626'}; padding: 14px 24px; font-size: 0.95rem; white-space: nowrap;">
+              <i class="fa-brands fa-facebook-messenger"></i> ${isWithin5Km ? 'Postularme con este Punto de Abordo' : 'Notificar Reclutador en Messenger'}
             </button>
           </div>
         </div>
       `;
 
       document.getElementById('btn-apply-with-nearest-stop').addEventListener('click', () => {
-        this.applyWithSelectedStop(closestRoute.name, closestStop.name, closestStop.ta);
+        this.applyWithSelectedStop(closestRoute.name, closestStop.name, closestStop.ta, isWithin5Km, minDistance);
       });
     }
   }
 
-  applyWithSelectedStop(routeName, stopName, timeStr) {
-    const messageText = `Hola, me interesa postularme.\n🚌 Punto de Abordo de Transporte: ${routeName} - ${stopName} (${timeStr})\n👤 Mi nombre es:\n📞 Mi teléfono es:`;
-    
+  applyWithSelectedStop(routeName, stopName, timeStr, isWithin5Km, distanceKm) {
+    let messageText = '';
+
+    if (isWithin5Km) {
+      messageText = `Hola, me interesa postularme.\n🚌 Punto de Abordo (${distanceKm.toFixed(1)} km): ${routeName} - ${stopName} (${timeStr})\n👤 Mi nombre es:\n📞 Mi teléfono es:`;
+      alert(`¡Punto de abordo seleccionado!\n"${routeName} - ${stopName} (${timeStr})"\n\nCopiamos esta información. Ahora te redirigiremos al chat de Messenger.`);
+    } else {
+      messageText = `Hola, me interesa postularme.\n⚠️ NOTA: El candidato se encuentra a ${distanceKm.toFixed(1)} km de la parada más cercana (NO HAY RECOLECCIÓN A MENOS DE 5KM).\n👤 Mi nombre es:\n📞 Mi teléfono es:`;
+      alert(`⚠️ NO HAY RECOLECCIÓN A MENOS DE 5KM\nLa parada más cercana está a ${distanceKm.toFixed(1)} km.\n\nSe incluyó este aviso en tu mensaje para informar al reclutador.`);
+    }
+
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(messageText).catch(() => {});
     }
 
-    alert(`¡Punto de abordo seleccionado!\n"${routeName} - ${stopName} (${timeStr})"\n\nCopiamos esta información. Ahora te redirigiremos al chat de Messenger.`);
     window.open(RECRUITER_MESSENGER_LINK, '_blank');
   }
 

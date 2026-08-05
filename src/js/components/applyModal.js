@@ -1,7 +1,9 @@
 /* ==========================================================================
-   APPLY MODAL COMPONENT
-   Handles job details preview drawer, Messenger contact redirection & application form
+   APPLY MODAL COMPONENT WITH 5KM GPS DISTANCE VERIFICATION
+   Handles job details preview drawer, 5KM GPS pickup validation & Messenger redirection
    ========================================================================== */
+
+import { TRANSPORT_ROUTES } from '../data/routesData.js';
 
 export const RECRUITER_MESSENGER_LINK = 'https://m.me/61593038273758';
 export const RECRUITER_FB_PROFILE = 'https://www.facebook.com/profile.php?id=61593038273758&sk=followers';
@@ -10,6 +12,8 @@ export class ApplyModal {
   constructor(modalContainerId) {
     this.container = document.getElementById(modalContainerId);
     this.currentJob = null;
+    this.userGpsLocation = null;
+    this.nearestPickupResult = null;
 
     this.init();
   }
@@ -63,15 +67,15 @@ export class ApplyModal {
               </div>
             </div>
 
-            <!-- Tab Content 2: Direct Messenger Application Form -->
+            <!-- Tab Content 2: Direct Messenger Application Form with 5KM Check -->
             <div id="tab-content-form" class="tab-panel">
-              <div class="fb-direct-card" style="background: #F0F6FF; border: 2px solid #1877F2; border-radius: var(--radius-lg); padding: 24px; text-align: center; margin-bottom: 24px;">
+              <div class="fb-direct-card" style="background: #F0F6FF; border: 2px solid #1877F2; border-radius: var(--radius-lg); padding: 20px; text-align: center; margin-bottom: 20px;">
                 <div class="fb-icon-wrapper">
-                  <i class="fa-brands fa-facebook-messenger" style="font-size: 3.5rem; color: #1877F2;"></i>
+                  <i class="fa-brands fa-facebook-messenger" style="font-size: 3rem; color: #1877F2;"></i>
                 </div>
-                <h3 style="color: var(--primary-navy-dark); font-size: 1.3rem; margin-top: 8px;">Postulación Directa a Messenger</h3>
-                <p style="font-size: 0.9rem; color: var(--text-medium);">
-                  Ingresa tus datos personales para armar tu solicitud. Al dar clic se copiará tu información y abrirá el chat oficial en Messenger.
+                <h3 style="color: var(--primary-navy-dark); font-size: 1.2rem; margin-top: 6px;">Postulación Directa a Messenger</h3>
+                <p style="font-size: 0.85rem; color: var(--text-medium);">
+                  Revisaremos tu ubicación para asignarte la ruta de transporte más cercana (Límite 5 km).
                 </p>
               </div>
 
@@ -100,10 +104,18 @@ export class ApplyModal {
                   </div>
                 </div>
 
-                <div class="form-actions" style="margin-top: 24px;">
+                <!-- GPS Location & 5KM Check Button -->
+                <div class="form-group" style="margin-top: 14px; background: rgba(0,168,232,0.06); padding: 14px; border-radius: var(--radius-md); border: 1px dashed var(--accent-cyan);">
+                  <button type="button" id="btn-modal-gps-check" class="btn-secondary full-width" style="padding: 10px; font-weight: 700; font-size: 0.88rem;">
+                    <i class="fa-solid fa-location-crosshairs text-cyan"></i> Detectar mi Ubicación GPS (Verificar Transporte < 5KM)
+                  </button>
+                  <div id="modal-gps-result-box" style="margin-top: 10px; font-size: 0.85rem; font-weight: 600;"></div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 20px;">
                   <button type="button" id="cancel-app-btn" class="btn-secondary">Cancelar</button>
                   <button type="submit" class="btn-primary glow-cyan" style="background: #1877F2; padding: 14px 24px; font-size: 1rem;">
-                    <i class="fa-brands fa-facebook-messenger"></i> Copiar Datos y Abrir Chat de Messenger
+                    <i class="fa-brands fa-facebook-messenger"></i> Copiar Datos y Abrir Chat en Messenger
                   </button>
                 </div>
               </form>
@@ -113,11 +125,11 @@ export class ApplyModal {
                 <div class="success-checkmark-icon">
                   <i class="fa-solid fa-circle-check text-green" style="font-size: 3rem;"></i>
                 </div>
-                <h3 style="font-size: 1.4rem; color: var(--primary-navy-dark); margin: 12px 0 6px 0;">¡Datos Copiados al Portapapeles!</h3>
-                <p style="font-size: 0.9rem; color: var(--text-medium); margin-bottom: 20px;">
-                  Tus datos han sido copiados. Pégalos directamente en el chat de Messenger que acabamos de abrir para enviárselos al reclutador.
+                <h3 style="font-size: 1.3rem; color: var(--primary-navy-dark); margin: 12px 0 6px 0;">¡Datos Copiados al Portapapeles!</h3>
+                <p style="font-size: 0.88rem; color: var(--text-medium); margin-bottom: 16px;">
+                  Tus datos y la información de tu transporte fueron copiados. Pégalos en el chat de Messenger que acabamos de abrir.
                 </p>
-                <div class="fb-button-wrap" style="margin: 20px 0;">
+                <div class="fb-button-wrap" style="margin: 16px 0;">
                   <a id="btn-reopen-messenger" href="${RECRUITER_MESSENGER_LINK}" target="_blank" rel="noopener noreferrer" class="btn-primary glow-cyan" style="background: #1877F2; color: #FFFFFF; text-decoration: none; padding: 12px 24px;">
                     <i class="fa-brands fa-facebook-messenger"></i> Abrir Chat de Messenger Nuevamente
                   </a>
@@ -141,6 +153,7 @@ export class ApplyModal {
     const contentForm = document.getElementById('tab-content-form');
     const btnSwitchTab = document.getElementById('btn-switch-to-messenger-tab');
     const cancelBtn = document.getElementById('cancel-app-btn');
+    const gpsBtn = document.getElementById('btn-modal-gps-check');
     const form = document.getElementById('job-application-form');
     const successCloseBtn = document.getElementById('success-close-btn');
 
@@ -173,6 +186,11 @@ export class ApplyModal {
     if (tabForm) tabForm.addEventListener('click', () => switchTab('form'));
     if (btnSwitchTab) btnSwitchTab.addEventListener('click', () => switchTab('form'));
 
+    // GPS Location Check
+    if (gpsBtn) {
+      gpsBtn.addEventListener('click', () => this.detectModalGpsLocation());
+    }
+
     // Form Submission: Copy Personal Data & Open Messenger
     if (form) {
       form.addEventListener('submit', (e) => {
@@ -182,7 +200,20 @@ export class ApplyModal {
         const fullName = document.getElementById('app-full-name').value.trim();
         const phone = document.getElementById('app-phone').value.trim();
 
-        const messageText = `Hola, me interesa postularme a la vacante:\n📌 Vacante: ${jobTitle}\n👤 Nombre Completo: ${fullName}\n📞 Teléfono: ${phone}`;
+        let transportInfo = '';
+
+        if (this.nearestPickupResult) {
+          const { route, stop, distance } = this.nearestPickupResult;
+          if (distance <= 5.0) {
+            transportInfo = `\n🚌 Parada de Transporte (${distance.toFixed(1)} km): ${route.name} - ${stop.name} (${stop.ta})`;
+          } else {
+            transportInfo = `\n⚠️ NO HAY RECOLECCIÓN A MENOS DE 5KM (Parada más cercana a ${distance.toFixed(1)} km: ${route.name} - ${stop.name})`;
+          }
+        } else {
+          transportInfo = `\n🚌 Transporte: Solicito verificar parada más cercana al contactar.`;
+        }
+
+        const messageText = `Hola, me interesa postularme a la vacante:\n📌 Vacante: ${jobTitle}\n👤 Nombre Completo: ${fullName}\n📞 Teléfono: ${phone}${transportInfo}`;
 
         // Copy message text to clipboard
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -203,8 +234,89 @@ export class ApplyModal {
     }
   }
 
+  detectModalGpsLocation() {
+    const resultBox = document.getElementById('modal-gps-result-box');
+    const gpsBtn = document.getElementById('btn-modal-gps-check');
+
+    if (!navigator.geolocation) {
+      if (resultBox) resultBox.innerHTML = `<span class="text-red">Navegador no soporta GPS.</span>`;
+      return;
+    }
+
+    if (resultBox) resultBox.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-cyan"></i> Verificando GPS...`;
+    if (gpsBtn) gpsBtn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const uLat = pos.coords.latitude;
+        const uLng = pos.coords.longitude;
+
+        this.calculateNearestPickup(uLat, uLng);
+
+        if (gpsBtn) gpsBtn.disabled = false;
+      },
+      (err) => {
+        // Fallback to Monterrey
+        this.calculateNearestPickup(25.6866, -100.3161);
+        if (gpsBtn) gpsBtn.disabled = false;
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
+
+  calculateNearestPickup(uLat, uLng) {
+    let closestStop = null;
+    let closestRoute = null;
+    let minDistance = Infinity;
+
+    TRANSPORT_ROUTES.forEach(route => {
+      route.stops.forEach(stop => {
+        const d = this.getHaversineKm(uLat, uLng, stop.lat, stop.lng);
+        if (d < minDistance) {
+          minDistance = d;
+          closestStop = stop;
+          closestRoute = route;
+        }
+      });
+    });
+
+    this.nearestPickupResult = { route: closestRoute, stop: closestStop, distance: minDistance };
+
+    const resultBox = document.getElementById('modal-gps-result-box');
+    if (!resultBox) return;
+
+    if (minDistance <= 5.0) {
+      resultBox.innerHTML = `
+        <div style="background: rgba(16,185,129,0.1); color: var(--status-green); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--status-green);">
+          <i class="fa-solid fa-circle-check"></i> <strong>Recolección Disponible (${minDistance.toFixed(1)} km)</strong><br>
+          ${closestRoute.name} &bull; ${closestStop.name} (${closestStop.ta})
+        </div>
+      `;
+    } else {
+      resultBox.innerHTML = `
+        <div style="background: rgba(239,68,68,0.1); color: var(--status-red); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid var(--status-red);">
+          <i class="fa-solid fa-triangle-exclamation"></i> <strong>NO HAY RECOLECCIÓN A MENOS DE 5KM</strong><br>
+          La parada más cercana está a ${minDistance.toFixed(1)} km (${closestStop.name}).
+        </div>
+      `;
+    }
+  }
+
+  getHaversineKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
   openWithJob(job) {
     this.currentJob = job;
+    this.nearestPickupResult = null;
     const backdrop = document.getElementById('job-modal-backdrop');
     if (!backdrop || !job) return;
 
@@ -212,6 +324,9 @@ export class ApplyModal {
     document.getElementById('tab-btn-details').click();
     document.getElementById('job-application-form').classList.remove('hidden');
     document.getElementById('application-success-view').classList.add('hidden');
+    
+    const gpsResultBox = document.getElementById('modal-gps-result-box');
+    if (gpsResultBox) gpsResultBox.innerHTML = '';
 
     // Auto-fill Job Title in Form
     const appJobTitleInput = document.getElementById('app-job-title');
