@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function populateDropdowns() {
-  const muniSelect = document.getElementById('adm-muni');
+  const muniSelect = document.getElementById('adm-municipality');
   const catSelect = document.getElementById('adm-category');
 
   if (muniSelect) {
@@ -30,7 +30,7 @@ function populateDropdowns() {
 }
 
 function setupFormListener() {
-  const form = document.getElementById('admin-add-job-form');
+  const form = document.getElementById('admin-publish-form');
   if (!form) return;
 
   form.addEventListener('submit', (e) => {
@@ -38,14 +38,15 @@ function setupFormListener() {
 
     const title = document.getElementById('adm-title').value.trim();
     const company = document.getElementById('adm-company').value.trim();
-    const municipalityId = document.getElementById('adm-muni').value;
+    const municipalityId = document.getElementById('adm-municipality').value;
     const category = document.getElementById('adm-category').value;
     const modality = document.getElementById('adm-modality').value;
     const salary = document.getElementById('adm-salary').value.trim();
-    const description = document.getElementById('adm-desc').value.trim();
-    const reqsStr = document.getElementById('adm-reqs').value.trim();
+    const description = document.getElementById('adm-description').value.trim();
+    const reqsStr = document.getElementById('adm-requirements').value.trim();
     const benStr = document.getElementById('adm-benefits').value.trim();
     const featured = document.getElementById('adm-featured').checked;
+    const urgent = document.getElementById('adm-urgent') ? document.getElementById('adm-urgent').checked : true;
 
     const muniObj = MUNICIPALITIES.find(m => m.id === municipalityId);
     const muniName = muniObj ? muniObj.name : municipalityId;
@@ -62,7 +63,7 @@ function setupFormListener() {
       modality,
       salary,
       featured,
-      urgent: false,
+      urgent,
       verified: true,
       postedDate: 'Hace un momento',
       description,
@@ -74,22 +75,17 @@ function setupFormListener() {
     form.reset();
     renderAdminTable();
 
-    const alertBox = document.getElementById('admin-success-toast');
-    if (alertBox) {
-      alertBox.classList.remove('hidden');
-      alertBox.innerText = `¡Vacante "${title}" en ${muniName} publicada exitosamente! AHORA ES VISIBLE EN EL SITIO PÚBLICO.`;
-      setTimeout(() => alertBox.classList.add('hidden'), 5000);
-    }
+    alert(`¡Vacante "${title}" en ${muniName} publicada exitosamente! AHORA ES VISIBLE EN EL SITIO PÚBLICO.`);
   });
 }
 
 function renderAdminTable() {
-  const tbody = document.getElementById('admin-jobs-tbody');
-  const counter = document.getElementById('admin-total-jobs-count');
+  const tbody = document.getElementById('adm-jobs-tbody');
+  const counter = document.getElementById('adm-count-total');
   if (!tbody) return;
 
   const jobs = getStoredJobs();
-  if (counter) counter.innerText = `${jobs.length} vacantes publicadas`;
+  if (counter) counter.innerText = `${jobs.length}`;
 
   tbody.innerHTML = jobs.map(job => `
     <tr>
